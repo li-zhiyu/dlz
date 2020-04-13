@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TBptMainFileMapper">
+    
+    <resultMap type="TBptMainFile" id="TBptMainFileResult">
+        <result property="id"    column="ID"    />
+        <result property="bptid"    column="BPTID"    />
+        <result property="fileType"    column="FILE_TYPE"    />
+        <result property="fileName"    column="FILE_NAME"    />
+        <result property="path"    column="PATH"    />
+        <result property="creator"    column="CREATOR"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+    </resultMap>
+
+    <sql id="selectTBptMainFileVo">
+        select ID, BPTID, FILE_TYPE, FILE_NAME, PATH, CREATOR, CREATE_TIME from t_bpt_main_file
+    </sql>
+
+    <select id="selectTBptMainFileList" parameterType="TBptMainFile" resultMap="TBptMainFileResult">
+        <include refid="selectTBptMainFileVo"/>
+        <where>  
+            <if test="bptid != null "> and BPTID = #{bptid}</if>
+            <if test="fileType != null  and fileType != ''"> and FILE_TYPE = #{fileType}</if>
+            <if test="fileName != null  and fileName != ''"> and FILE_NAME like concat('%', #{fileName}, '%')</if>
+            <if test="path != null  and path != ''"> and PATH = #{path}</if>
+            <if test="creator != null  and creator != ''"> and CREATOR = #{creator}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTBptMainFileById" parameterType="Long" resultMap="TBptMainFileResult">
+        <include refid="selectTBptMainFileVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertTBptMainFile" parameterType="TBptMainFile" useGeneratedKeys="true" keyProperty="id">
+        insert into t_bpt_main_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bptid != null ">BPTID,</if>
+            <if test="fileType != null  and fileType != ''">FILE_TYPE,</if>
+            <if test="fileName != null  and fileName != ''">FILE_NAME,</if>
+            <if test="path != null  and path != ''">PATH,</if>
+            <if test="creator != null  and creator != ''">CREATOR,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bptid != null ">#{bptid},</if>
+            <if test="fileType != null  and fileType != ''">#{fileType},</if>
+            <if test="fileName != null  and fileName != ''">#{fileName},</if>
+            <if test="path != null  and path != ''">#{path},</if>
+            <if test="creator != null  and creator != ''">#{creator},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTBptMainFile" parameterType="TBptMainFile">
+        update t_bpt_main_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bptid != null ">BPTID = #{bptid},</if>
+            <if test="fileType != null  and fileType != ''">FILE_TYPE = #{fileType},</if>
+            <if test="fileName != null  and fileName != ''">FILE_NAME = #{fileName},</if>
+            <if test="path != null  and path != ''">PATH = #{path},</if>
+            <if test="creator != null  and creator != ''">CREATOR = #{creator},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteTBptMainFileById" parameterType="Long">
+        delete from t_bpt_main_file where ID = #{id}
+    </delete>
+
+    <delete id="deleteTBptMainFileByIds" parameterType="String">
+        delete from t_bpt_main_file where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TProjectAdinfoMapper">
+    
+    <resultMap type="TProjectAdinfo" id="TProjectAdinfoResult">
+        <result property="padid"    column="PADID"    />
+        <result property="pjtid"    column="PJTID"    />
+        <result property="zbxm"    column="ZBXM"    />
+        <result property="zb"    column="ZB"    />
+        <result property="df"    column="DF"    />
+        <result property="bz"    column="BZ"    />
+    </resultMap>
+
+    <sql id="selectTProjectAdinfoVo">
+        select PADID, PJTID, ZBXM, ZB, DF, BZ from t_project_adinfo
+    </sql>
+
+    <select id="selectTProjectAdinfoList" parameterType="TProjectAdinfo" resultMap="TProjectAdinfoResult">
+        <include refid="selectTProjectAdinfoVo"/>
+        <where>  
+            <if test="pjtid != null "> and PJTID = #{pjtid}</if>
+            <if test="zbxm != null  and zbxm != ''"> and ZBXM = #{zbxm}</if>
+            <if test="zb != null  and zb != ''"> and ZB = #{zb}</if>
+            <if test="df != null  and df != ''"> and DF = #{df}</if>
+            <if test="bz != null  and bz != ''"> and BZ = #{bz}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProjectAdinfoById" parameterType="Long" resultMap="TProjectAdinfoResult">
+        <include refid="selectTProjectAdinfoVo"/>
+        where PADID = #{padid}
+    </select>
+        
+    <insert id="insertTProjectAdinfo" parameterType="TProjectAdinfo" useGeneratedKeys="true" keyProperty="padid">
+        insert into t_project_adinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pjtid != null ">PJTID,</if>
+            <if test="zbxm != null  and zbxm != ''">ZBXM,</if>
+            <if test="zb != null  and zb != ''">ZB,</if>
+            <if test="df != null  and df != ''">DF,</if>
+            <if test="bz != null  and bz != ''">BZ,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pjtid != null ">#{pjtid},</if>
+            <if test="zbxm != null  and zbxm != ''">#{zbxm},</if>
+            <if test="zb != null  and zb != ''">#{zb},</if>
+            <if test="df != null  and df != ''">#{df},</if>
+            <if test="bz != null  and bz != ''">#{bz},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProjectAdinfo" parameterType="TProjectAdinfo">
+        update t_project_adinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pjtid != null ">PJTID = #{pjtid},</if>
+            <if test="zbxm != null  and zbxm != ''">ZBXM = #{zbxm},</if>
+            <if test="zb != null  and zb != ''">ZB = #{zb},</if>
+            <if test="df != null  and df != ''">DF = #{df},</if>
+            <if test="bz != null  and bz != ''">BZ = #{bz},</if>
+        </trim>
+        where PADID = #{padid}
+    </update>
+
+    <delete id="deleteTProjectAdinfoById" parameterType="Long">
+        delete from t_project_adinfo where PADID = #{padid}
+    </delete>
+
+    <delete id="deleteTProjectAdinfoByIds" parameterType="String">
+        delete from t_project_adinfo where PADID in 
+        <foreach item="padid" collection="array" open="(" separator="," close=")">
+            #{padid}
+        </foreach>
+    </delete>
+
+    <insert id="batchInsertTProjectAdinfo">
+        insert into t_project_adinfo(PJTID, ZBXM,ZB,DF,BZ) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.pjtid},#{item.zbxm},#{item.zb},#{item.df},#{item.bz})
+        </foreach>
+    </insert>
+    
+</mapper>

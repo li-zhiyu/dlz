@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增构件库管理')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-component-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">构件名：*</label>
+                <div class="col-sm-8">
+                    <input name="cpNm" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">构件编码：*</label>
+                <div class="col-sm-8">
+                    <input name="cpNo" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">类型：*</label>
+                <div class="col-sm-8">
+                    <select name="cpType" id="cpType" class="form-control m-b required" onchange="selectClick()" th:with="type=${@dict.getType('scheme_component')}" required>
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">子类型：*</label>
+                <div class="col-sm-8">
+                    <select name="cpType2" id="cpType2" class="form-control m-b required" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">长：*</label>
+                <div class="col-sm-8">
+                    <input name="length" class="form-control required" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">宽：*</label>
+                <div class="col-sm-8">
+                    <input name="width" class="form-control required" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">高：*</label>
+                <div class="col-sm-8">
+                    <input name="heigth" class="form-control required" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">重：*</label>
+                <div class="col-sm-8">
+                    <input name="weigth" class="form-control required" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="memo" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">构件文件 *</label>
+                <div class="col-sm-8">
+                    <input id="conmponent-file" name="conmponent-file" type="file"  data-min-file-count="1" data-theme="fas" >
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: bootstrap-fileinput-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "scheme/component"
+        $(document).ready(function () {
+            $("#conmponent-file").fileinput({
+                theme: 'explorer-fas',
+                language: 'zh',
+                uploadUrl: prefix+'/add',
+                showUpload: false,//去除上传按钮
+                overwriteInitial: true,
+                initialPreviewAsData: true,
+                //allowedFileTypes: ['image'],
+                layoutTemplates: {
+                    actionUpload: '',//去除上传按钮
+                    actionDelete: '',//去除删除按钮
+                },
+                allowedFileExtensions: ['jpg', 'png'],
+                dropZoneTitle:'拖拽构件文件到这里 &hellip;<br>支持格式：.jpg/.png',
+                uploadExtraData:function () {           //传参
+                    var data = {
+                        "formData": $('#form-component-add').serialize(),      //此处自定义传参
+                    };
+                    return data;
+                }
+            }).on('fileuploaded', function(event, data, previewId, index) {
+                $.modal.close();
+                var parent = window.parent;
+                parent.$.table.refresh();
+            });
+        });
+
+        $("#form-component-add").validate({
+            focusCleanup: true
+        });
+        
+        function selectClick() {
+            var vs = $('#cpType  option:selected').text();//getName
+            $.post("/system/dict/data/list/byDictName",
+                {
+                    dictName: vs,
+                },
+                function(data,status){
+                    $("#cpType2").empty();
+                    for (var i=0;i<data.total;i++){
+                        $("#cpType2").append("<option value="+data.rows[i].dictValue+">"+data.rows[i].dictLabel+"</option>");
+                    }
+                });
+        }
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $("#conmponent-file").fileinput('upload');
+            }
+        }
+
+        $("input[name='editDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

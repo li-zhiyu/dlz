@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增方案明细')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-detail-add">
+            <input name="bptid" th:value="${bptid}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">利用率：</label>
+                <div class="col-sm-7">
+                    <input name="利用率" class="form-control" type="text">
+                </div>
+                <label class="col-sm-pull-1 control-label">%</label>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公摊面积：</label>
+                <div class="col-sm-7">
+                    <input name="公摊面积" class="form-control" type="text">
+                </div>
+                <label class="col-sm-pull-1 control-label">%</label>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">装配率：</label>
+                <div class="col-sm-7">
+                    <input name="装配率" class="form-control" type="text">
+                </div>
+                <label class="col-sm-pull-1 control-label">%</label>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">户均面积：</label>
+                <div class="col-sm-7">
+                    <input name="户均面积" class="form-control" type="text">
+                </div>
+                <label class="col-sm-pull-1 control-label">m²</label>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">布墙率：</label>
+                <div class="col-sm-7">
+                    <input name="布墙率" class="form-control" type="text">
+                </div>
+                <label class="col-sm-pull-1 control-label">%</label>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">墙地比：</label>
+                <div class="col-sm-8">
+                    <input name="墙地比" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">窗地比：</label>
+                <div class="col-sm-8">
+                    <input name="窗地比" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">剪力墙外墙拆分个数：</label>
+                <div class="col-sm-8">
+                    <input name="剪力墙外墙拆分个数" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">剪力墙内墙拆分个数：</label>
+                <div class="col-sm-8">
+                    <input name="剪力墙内墙拆分个数" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">楼板拆分个数：</label>
+                <div class="col-sm-8">
+                    <input name="楼板拆分个数" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "scheme/detail"
+        $("#form-detail-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-detail-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

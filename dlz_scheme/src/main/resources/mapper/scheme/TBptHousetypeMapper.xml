@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TBptHousetypeMapper">
+    
+    <resultMap type="TBptHousetype" id="TBptHousetypeResult">
+        <result property="htid"    column="HTID"    />
+        <result property="htNm"    column="HT_NM"    />
+        <result property="htNo"    column="HT_NO"    />
+        <result property="htType"    column="HT_TYPE"    />
+        <result property="fileNm"    column="FILE_NM"    />
+        <result property="path"    column="PATH"    />
+        <result property="memo"    column="MEMO"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="kfs"    column="KFS"    />
+        <result property="hxs"    column="HXS"    />
+        <result property="hx1"    column="HX1"    />
+        <result property="hx2"    column="HX2"    />
+        <result property="hx3"    column="HX3"    />
+        <result property="hx4"    column="HX4"    />
+        <result property="dcjzmj"    column="DCJZMJ"    />
+        <result property="cg"    column="CG"    />
+    </resultMap>
+
+    <sql id="selectTBptHousetypeVo">
+        select HTID, HT_NM, HT_NO, HT_TYPE, FILE_NM, PATH, MEMO,ADDRESS,KFS,HXS,HX1,HX2,HX3,HX4,DCJZMJ,CG from t_bpt_housetype
+    </sql>
+
+    <select id="selectTBptHousetypeList" parameterType="TBptHousetype" resultMap="TBptHousetypeResult">
+        <include refid="selectTBptHousetypeVo"/>
+        <where>  
+            <if test="htNm != null  and htNm != ''"> and HT_NM = #{htNm}</if>
+            <if test="htNo != null  and htNo != ''"> and HT_NO = #{htNo}</if>
+            <if test="htType != null  and htType != ''"> and HT_TYPE = #{htType}</if>
+            <if test="fileNm != null  and fileNm != ''"> and FILE_NM = #{fileNm}</if>
+            <if test="path != null  and path != ''"> and PATH = #{path}</if>
+            <if test="memo != null  and memo != ''"> and MEMO = #{memo}</if>
+            <if test="address != null  and address != ''"> and ADDRESS = #{address}</if>
+            <if test="kfs != null  and kfs != ''"> and KFS = #{kfs}</if>
+            <if test="hxs != null  and hxs != ''"> and HXS = #{hxs}</if>
+            <if test="hx1 != null  and hx1 != ''"> and HX1 = #{hx1}</if>
+            <if test="hx2 != null  and hx2 != ''"> and HX2 = #{hx2}</if>
+            <if test="hx3 != null  and hx3 != ''"> and HX3 = #{hx3}</if>
+            <if test="hx4 != null  and hx4 != ''"> and HX4 = #{hx4}</if>
+            <if test="dcjzmj != null  and dcjzmj != ''"> and DCJZMJ = #{dcjzmj}</if>
+            <if test="cg != null  and cg != ''"> and CG = #{cg}</if>
+        </where>
+    </select>
+    
+    <select id="selectTBptHousetypeById" parameterType="Long" resultMap="TBptHousetypeResult">
+        <include refid="selectTBptHousetypeVo"/>
+        where HTID = #{htid}
+    </select>
+        
+    <insert id="insertTBptHousetype" parameterType="TBptHousetype" useGeneratedKeys="true" keyProperty="htid">
+        insert into t_bpt_housetype
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="htNm != null  and htNm != ''">HT_NM,</if>
+            <if test="htNo != null  and htNo != ''">HT_NO,</if>
+            <if test="htType != null  and htType != ''">HT_TYPE,</if>
+            <if test="fileNm != null  and fileNm != ''">FILE_NM,</if>
+            <if test="path != null  and path != ''">PATH,</if>
+            <if test="memo != null  and memo != ''">MEMO,</if>
+            <if test="address != null  and address != ''">ADDRESS,</if>
+            <if test="kfs != null  and kfs != ''">KFS,</if>
+            <if test="hxs != null  and hxs != ''">HXS,</if>
+            <if test="hx1 != null  and hx1 != ''">HX1,</if>
+            <if test="hx2 != null  and hx2 != ''">HX2,</if>
+            <if test="hx3 != null  and hx3 != ''">HX3,</if>
+            <if test="hx4 != null  and hx4 != ''">HX4,</if>
+            <if test="dcjzmj != null  and dcjzmj != ''">DCJZMJ,</if>
+            <if test="cg != null  and cg != ''">CG</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="htNm != null  and htNm != ''">#{htNm},</if>
+            <if test="htNo != null  and htNo != ''">#{htNo},</if>
+            <if test="htType != null  and htType != ''">#{htType},</if>
+            <if test="fileNm != null  and fileNm != ''">#{fileNm},</if>
+            <if test="path != null  and path != ''">#{path},</if>
+            <if test="memo != null  and memo != ''">#{memo},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="kfs != null  and kfs != ''">#{kfs},</if>
+            <if test="hxs != null  and hxs != ''">#{hxs},</if>
+            <if test="hx1 != null  and hx1 != ''">#{hx1},</if>
+            <if test="hx2 != null  and hx2 != ''">#{hx2},</if>
+            <if test="hx3 != null  and hx3 != ''">#{hx3},</if>
+            <if test="hx4 != null  and hx4 != ''">#{hx4},</if>
+            <if test="dcjzmj != null  and dcjzmj != ''">#{dcjzmj},</if>
+            <if test="cg != null  and cg != ''">#{cg}</if>
+         </trim>
+    </insert>
+
+    <update id="updateTBptHousetype" parameterType="TBptHousetype">
+        update t_bpt_housetype
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="htNm != null  and htNm != ''">HT_NM = #{htNm},</if>
+            <if test="htNo != null  and htNo != ''">HT_NO = #{htNo},</if>
+            <if test="htType != null  and htType != ''">HT_TYPE = #{htType},</if>
+            <if test="fileNm != null  and fileNm != ''">FILE_NM = #{fileNm},</if>
+            <if test="path != null  and path != ''">PATH = #{path},</if>
+            <if test="memo != null  and memo != ''">MEMO = #{memo},</if>
+            <if test="address != null  and address != ''">ADDRESS = #{address},</if>
+            <if test="kfs != null  and kfs != ''">KFS = #{kfs},</if>
+            <if test="hxs != null  and hxs != ''">HXS = #{hxs},</if>
+            <if test="hx1 != null  and hx1 != ''">HX1 = #{hx1},</if>
+            <if test="hx2 != null  and hx2 != ''">HX2 = #{hx2},</if>
+            <if test="hx3 != null  and hx3 != ''">HX3 = #{hx3},</if>
+            <if test="hx4 != null  and hx4 != ''">HX4 = #{hx4},</if>
+            <if test="dcjzmj != null  and dcjzmj != ''">DCJZMJ = #{dcjzmj},</if>
+            <if test="cg != null  and cg != ''">CG = #{cg}</if>
+        </trim>
+        where HTID = #{htid}
+    </update>
+
+    <delete id="deleteTBptHousetypeById" parameterType="Long">
+        delete from t_bpt_housetype where HTID = #{htid}
+    </delete>
+
+    <delete id="deleteTBptHousetypeByIds" parameterType="String">
+        delete from t_bpt_housetype where HTID in 
+        <foreach item="htid" collection="array" open="(" separator="," close=")">
+            #{htid}
+        </foreach>
+    </delete>
+    
+</mapper>

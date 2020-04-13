@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('户型列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>户型名：</p>
+                            <input type="text" name="htNm"/>
+                        </li>
+                        <li>
+                            <p>类型：</p>
+                            <select name="htType" th:with="type=${@dict.getType('')}">
+                                <option value="">所有</option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>文件名：</p>
+                            <input type="text" name="fileNm"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="scheme:housetype:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="scheme:housetype:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="scheme:housetype:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="scheme:housetype:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('scheme:housetype:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('scheme:housetype:remove')}]];
+    var datas = [[${@dict.getType('project_jzhx')}]];
+    var prefix = ctx + "scheme/housetype";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "户型",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'htid',
+                    title: '户型主键',
+                    visible: false
+                },
+                {
+                    field: 'path',
+                    title: '文件上传路径',
+                    visible: false
+                },
+                {
+                    field: 'htNm',
+                    title: '户型名'
+                },
+                {
+                    field: 'htNo',
+                    title: '户型编码'
+                },
+                {
+                    field: 'htType',
+                    title: '类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+                {
+                    field: 'fileNm',
+                    title: '文件名'
+                },
+                {
+                    field: 'address',
+                    title: '所在地'
+                },
+                {
+                    field: 'kfs',
+                    title: '开发商'
+                },
+                {
+                    field: 'dcjzmj',
+                    title: '单层建筑面积'
+                },
+                {
+                    field: 'cg',
+                    title: '层高'
+                },
+                {
+                    field: 'hxs',
+                    title: '户型数'
+                },
+                {
+                    field: 'hx1',
+                    title: '户型一'
+                },
+                {
+                    field: 'hx2',
+                    title: '户型二'
+                },
+                {
+                    field: 'hx3',
+                    title: '户型三'
+                },
+                {
+                    field: 'hx4',
+                    title: '户型四'
+                },
+                {
+                    title: '图片',
+                    formatter: function (value, row, index) {
+                        return $.table.imageView(row.path);
+                    }
+                },
+                {
+                    field: 'memo',
+                    title: '备注'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.htid + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.htid + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

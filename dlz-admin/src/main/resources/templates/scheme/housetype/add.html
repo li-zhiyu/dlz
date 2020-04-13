@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增户型')" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-housetype-add">
+            <div class="row">
+                <div class="col-sm-6">
+                   <div class="row">
+                       <div class="col-sm-12">
+                           <div class="form-group">
+                               <label class="col-sm-4 control-label">户型名 *</label>
+                               <div class="col-sm-8">
+                                   <input name="htNm" class="form-control" type="text" required>
+                               </div>
+                           </div>
+                           <div class="form-group">
+                               <label class="col-sm-4 control-label">项目所在地 *</label>
+                               <div class="col-sm-8">
+                                   <input name="address" class="form-control" type="text" required>
+                               </div>
+                           </div>
+                           <div class="form-group">
+                               <label class="col-sm-4 control-label">单层建筑面积 *</label>
+                               <div class="col-sm-8">
+                                   <input name="dcjzmj" class="form-control" type="text" required>
+                               </div>
+                           </div>
+                           <div class="form-group">
+                               <label class="col-sm-4 control-label">类型 *</label>
+                               <div class="col-sm-8">
+                                   <select name="htType" class="form-control required" th:with="type=${@dict.getType('project_jzhx')}">
+                                       <option value="">请选择</option>
+                                       <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"> </option>
+                                   </select>
+                               </div>
+                           </div>
+                           <div class="form-group" id="layout1" >
+                               <label class="col-sm-4 control-label">户型一面积</label>
+                               <div class="col-sm-8">
+                                   <input name="hx1" class="form-control" type="text" value="105">
+                               </div>
+                           </div>
+                           <div class="form-group" id="layout3" >
+                               <label class="col-sm-4 control-label">户型三面积</label>
+                               <div class="col-sm-8">
+                                   <input name="hx3" class="form-control" type="text" >
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">户型编码 *</label>
+                                <div class="col-sm-8">
+                                    <input name="htNo" class="form-control" type="text" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">开发商 *</label>
+                                <div class="col-sm-8">
+                                    <input name="kfs" class="form-control" type="text" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">层高 *</label>
+                                <div class="col-sm-8">
+                                    <input name="cg" class="form-control" type="text" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">户型数 *</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="hxs" id="hxs" onchange="changeOption()">
+                                        <option>1</option>
+                                        <option >2</option>
+                                        <option>3</option>
+                                        <option selected>4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" id="layout2" >
+                                <label class="col-sm-4 control-label">户型二面积</label>
+                                <div class="col-sm-8">
+                                    <input name="hx2" class="form-control" type="text" value="105">
+                                </div>
+                            </div>
+                            <div class="form-group" id="layout4" >
+                                <label class="col-sm-4 control-label">户型四面积</label>
+                                <div class="col-sm-8">
+                                    <input name="hx4" class="form-control" type="text" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-10">
+                            <textarea name="memo" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">户型文件 *</label>
+                        <div class="col-sm-10">
+                            <input id="houseType-file" name="houseType-file" type="file"  data-min-file-count="1" data-theme="fas" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-fileinput-js" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var prefix = ctx + "scheme/housetype";
+            $("#houseType-file").fileinput({
+                theme: 'explorer-fas',
+                language: 'zh',
+                uploadUrl: prefix+'/add',
+                showUpload: false,//去除上传按钮
+                overwriteInitial: true,
+                initialPreviewAsData: true,
+                //allowedFileTypes: ['image'],
+                layoutTemplates: {
+                    actionUpload: '',//去除上传按钮
+                    actionDelete: '',//去除删除按钮
+                },
+                allowedFileExtensions: ['jpg', 'png'],
+                dropZoneTitle:'拖拽户型文件到这里 &hellip;<br>支持格式：.png/.jpg',
+                uploadExtraData:function () {           //传参
+                    var data = {
+                        "formData": $('#form-housetype-add').serialize(),      //此处自定义传参
+                    };
+                    return data;
+                }
+            });
+        });
+        function changeOption(){
+            //获取被选中的option标签
+            var vs = $('#hxs  option:selected').val();
+            if(vs == 1)
+            {
+                $("#layout1").show();
+                $("#layout2").hide();
+                $("#layout3").hide();
+                $("#layout4").hide();
+            }
+            if(vs == 2)
+            {
+                $("#layout1").show();
+                $("#layout2").show();
+                $("#layout3").hide();
+                $("#layout4").hide();
+            }
+            if(vs == 3)
+            {
+                $("#layout1").show();
+                $("#layout2").show();
+                $("#layout3").show();
+                $("#layout4").hide();
+            }
+            if(vs == 4)
+            {
+                $("#layout1").show();
+                $("#layout2").show();
+                $("#layout3").show();
+                $("#layout4").show();
+            }
+        }
+        $("#form-housetype-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $("#houseType-file").fileinput('upload');
+                $('#houseType-file').on('fileuploaded', function(event, data, previewId, index) {
+                    $.modal.close();
+                    var parent = window.parent;
+                    parent.$.table.refresh();
+                    console.log('File uploaded triggered');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

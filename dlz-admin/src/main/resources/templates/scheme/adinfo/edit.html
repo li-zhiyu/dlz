@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改方案对比数据')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-adinfo-edit" th:object="${tProjectAdinfo}">
+            <input name="padid" th:field="*{padid}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">指标名称：</label>
+                <div class="col-sm-8">
+                    <input name="zbxm" th:field="*{zbxm}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">占比：</label>
+                <div class="col-sm-8">
+                    <input name="zb" th:field="*{zb}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">得分：</label>
+                <div class="col-sm-8">
+                    <input name="df" th:field="*{df}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="bz" th:field="*{bz}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "scheme/adinfo";
+        $("#form-adinfo-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-adinfo-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

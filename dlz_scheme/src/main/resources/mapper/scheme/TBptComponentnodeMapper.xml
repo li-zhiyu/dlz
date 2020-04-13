@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TBptComponentnodeMapper">
+    
+    <resultMap type="TBptComponentnode" id="TBptComponentnodeResult">
+        <result property="cnid"    column="CNID"    />
+        <result property="cnNm"    column="CN_NM"    />
+        <result property="cnNo"    column="CN_NO"    />
+        <result property="cnType"    column="CN_TYPE"    />
+        <result property="cnType2"    column="CN_TYPE_2"    />
+        <result property="fileNm"    column="FILE_NM"    />
+        <result property="path"    column="PATH"    />
+        <result property="memo"    column="MEMO"    />
+    </resultMap>
+
+    <sql id="selectTBptComponentnodeVo">
+        select CNID, CN_NM, CN_NO, CN_TYPE,CN_TYPE_2, FILE_NM, PATH, MEMO from t_bpt_componentnode
+    </sql>
+
+    <select id="selectTBptComponentnodeList" parameterType="TBptComponentnode" resultMap="TBptComponentnodeResult">
+        <include refid="selectTBptComponentnodeVo"/>
+        <where>  
+            <if test="cnNm != null  and cnNm != ''"> and CN_NM = #{cnNm}</if>
+            <if test="cnNo != null  and cnNo != ''"> and CN_NO = #{cnNo}</if>
+            <if test="cnType != null  and cnType != ''"> and CN_TYPE = #{cnType}</if>
+            <if test="cnType2 != null  and cnType2 != ''"> and CN_TYPE_2 = #{cnType2}</if>
+            <if test="fileNm != null  and fileNm != ''"> and FILE_NM = #{fileNm}</if>
+            <if test="path != null  and path != ''"> and PATH = #{path}</if>
+            <if test="memo != null  and memo != ''"> and MEMO = #{memo}</if>
+        </where>
+    </select>
+
+    <select id="selectTBptComponentNodeUnbindList" parameterType="TBptComponentnode" resultMap="TBptComponentnodeResult">
+        select CNID, CN_NM, CN_NO, CN_TYPE,CN_TYPE_2, FILE_NM, PATH, MEMO
+        from t_bpt_componentnode t1
+        where CNID not in (select t2.CNID FROM t_project_componentnode t2 where t2.PJTID = #{pjtid})
+        <if test="cnNm != null  and cnNm != ''"> and CN_NM = #{cnNm}</if>
+        <if test="cnType != null  and cnType != ''"> and CN_TYPE = #{cnType}</if>
+    </select>
+
+
+    <select id="selectTBptComponentNodeListBypjtid" parameterType="TBptComponentnode" resultMap="TBptComponentnodeResult">
+        select t1.CNID, CN_NM, CN_NO, CN_TYPE,CN_TYPE_2, FILE_NM, PATH, MEMO
+        from t_bpt_componentnode t1
+        left join t_project_componentnode t2 on t2.CNID = t1.CNID
+        where t2.PJTID=#{pjtid}
+        <if test="cnNm != null  and cnNm != ''"> and CN_NM = #{cnNm}</if>
+        <if test="cnType != null  and cnType != ''"> and CN_TYPE = #{cnType}</if>
+    </select>
+    
+    <select id="selectTBptComponentnodeById" parameterType="Long" resultMap="TBptComponentnodeResult">
+        <include refid="selectTBptComponentnodeVo"/>
+        where CNID = #{cnid}
+    </select>
+        
+    <insert id="insertTBptComponentnode" parameterType="TBptComponentnode" useGeneratedKeys="true" keyProperty="cnid">
+        insert into t_bpt_componentnode
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cnNm != null  and cnNm != ''">CN_NM,</if>
+            <if test="cnNo != null  and cnNo != ''">CN_NO,</if>
+            <if test="cnType != null  and cnType != ''">CN_TYPE,</if>
+            <if test="cnType2 != null  and cnType2 != ''">CN_TYPE_2,</if>
+            <if test="fileNm != null  and fileNm != ''">FILE_NM,</if>
+            <if test="path != null  and path != ''">PATH,</if>
+            <if test="memo != null  and memo != ''">MEMO,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cnNm != null  and cnNm != ''">#{cnNm},</if>
+            <if test="cnNo != null  and cnNo != ''">#{cnNo},</if>
+            <if test="cnType != null  and cnType != ''">#{cnType},</if>
+            <if test="cnType2 != null  and cnType2 != ''">#{cnType2},</if>
+            <if test="fileNm != null  and fileNm != ''">#{fileNm},</if>
+            <if test="path != null  and path != ''">#{path},</if>
+            <if test="memo != null  and memo != ''">#{memo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTBptComponentnode" parameterType="TBptComponentnode">
+        update t_bpt_componentnode
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cnNm != null  and cnNm != ''">CN_NM = #{cnNm},</if>
+            <if test="cnNo != null  and cnNo != ''">CN_NO = #{cnNo},</if>
+            <if test="cnType != null  and cnType != ''">CN_TYPE = #{cnType},</if>
+            <if test="cnType2 != null  and cnType2 != ''">CN_TYPE_2 = #{cnType2},</if>
+            <if test="fileNm != null  and fileNm != ''">FILE_NM = #{fileNm},</if>
+            <if test="path != null  and path != ''">PATH = #{path},</if>
+            <if test="memo != null  and memo != ''">MEMO = #{memo},</if>
+        </trim>
+        where CNID = #{cnid}
+    </update>
+
+    <delete id="deleteTBptComponentnodeById" parameterType="Long">
+        delete from t_bpt_componentnode where CNID = #{cnid}
+    </delete>
+
+    <delete id="deleteTBptComponentnodeByIds" parameterType="String">
+        delete from t_bpt_componentnode where CNID in 
+        <foreach item="cnid" collection="array" open="(" separator="," close=")">
+            #{cnid}
+        </foreach>
+    </delete>
+    
+</mapper>

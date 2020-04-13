@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('节点库管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <input type="hidden" name="pjtid" id="pjtid" th:value="${pjtid}" >
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>节点名：</p>
+                                <input type="text" name="cnNm"/>
+                            </li>
+                            <li>
+                                <p>类型：</p>
+                                <select name="cnType" th:with="type=${@dict.getType('scheme_node')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="selectComponentNode()" shiro:hasPermission="scheme:componentnode:add">
+                    <i class="fa fa-plus"></i> 添加节点
+                </a>
+                <a class="btn btn-danger" onclick="closeItem()">
+                    <i class="fa fa-reply-all"></i> 关闭
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('scheme:componentnode:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('scheme:componentnode:remove')}]];
+        var datas = [[${@dict.getType('scheme_componentnode')}]];
+        var prefix = ctx + "scheme/componentnode";
+
+        $(function() {
+            var options = {
+                url: prefix + "/listBypjtid",
+                modalName: "节点库管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'cnid',
+                    title : '构件节点主键',
+                    visible: false
+                },
+                {
+                    field : 'cnNm',
+                    title : '节点名'
+                },
+                {
+                    field : 'cnNo',
+                    title : '节点编码'
+                },
+                {
+                    field : 'cnType',
+                    title : '类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+                {
+                    field : 'fileNm',
+                    title : '文件名'
+                },
+                {
+                    title: '图片',
+                    formatter: function(value, row, index) {
+                        return $.table.imageView(row.path);
+                    }
+                },
+                {
+                title: '操作',
+                align: 'center',
+                formatter: function(value, row, index) {
+                    var actions = [];
+                    actions.push('<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cancelComponentNode(\'' + row.cnid + '\')"><i class="fa fa-unlock"></i>取消绑定</a> ');
+                    return actions.join('');
+                }
+                }]
+            };
+            $.table.init(options);
+        });
+        /* 绑定构件-选择构件 */
+        function selectComponentNode() {
+            var url = prefix + '/select/' + $("#pjtid").val();
+            $.modal.open("选择节点", url);
+        }
+        /* 绑定构件-取消绑定 */
+        function cancelComponentNode(cnid) {
+            $.modal.confirm("确认要取消该节点吗？", function() {
+                $.operate.post(prefix + "/cancel", { "pjtid": $("#pjtid").val(), "cnid": cnid });
+            })
+        }
+        /** 关闭选项卡 */
+        var closeItem = function(dataId) {
+            var topWindow = $(window.parent.document);
+            if ($.common.isNotEmpty(dataId)) {
+                window.parent.$.modal.closeLoading();
+                // 根据dataId关闭指定选项卡
+                $('.menuTab[data-id="' + dataId + '"]', topWindow).remove();
+                // 移除相应tab对应的内容区
+                $('.mainContent .RuoYi_iframe[data-id="' + dataId + '"]', topWindow).remove();
+                return;
+            }
+            var panelUrl = window.frameElement.getAttribute('data-panel');
+            $('.page-tabs-content .active i', topWindow).click();
+            if ($.common.isNotEmpty(panelUrl)) {
+                $('.menuTab[data-id="' + panelUrl + '"]', topWindow).addClass('active').siblings('.menuTab').removeClass('active');
+                $('.mainContent .RuoYi_iframe', topWindow).each(function () {
+                    if ($(this).data('id') == panelUrl) {
+                        $(this).show().siblings('.RuoYi_iframe').hide();
+                        return false;
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('项目列表')" />
+    <th:block th:include="include :: jquery-steps-css" />
+    <th:block th:include="include :: bootstrap-select-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>项目地址：</p>
+                                <input type="text" name="pjtAddress"/>
+                            </li>
+                            <li class="select-time">
+                                <p>创建时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" data-toggle="modal" data-target="#myModal" shiro:hasPermission="scheme:info:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="scheme:info:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="scheme:info:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="scheme:info:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="modal inmodal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                            </button>
+                            <h2 class="modal-title">单体建筑装配式方案快速设计</h2>
+                        </div>
+                        <div class="modal-body " >
+                            <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+                                <form id="form" action="" class="wizard-big form-horizontal clearfix" >
+                                    <h1>项目总体信息</h1>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">项目名称 *</label>
+                                                    <div class="col-sm-9">
+                                                        <input id="pjtNm" name="pjtNm" type="text" class="form-control required">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">项目地址 *</label>
+                                                    <div class="col-sm-9" >
+                                                        <input id="pjtAddress" name="pjtAddress" type="text" class="form-control required">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">开发商 *</label>
+                                                    <div class="col-sm-9">
+                                                        <input id="kfs" name="kfs" type="text" class="form-control required">
+                                                    </div>
+                                                </div>
+                                                <!--<div class="form-group">
+                                                    <label class="col-sm-3 control-label">项目地址 *</label>
+                                                    <div class="col-sm-9 form-inline">
+                                                        <div data-toggle="distpicker" data-autoselect="3" data-province="湖南省">
+                                                            <select class="form-control"></select>
+                                                            <select class="form-control"></select>
+                                                            <select class="form-control"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>-->
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <h1>项目详细参数</h1>
+                                    <fieldset>
+                                        <input name="pjtid" th:value="${pjtid}" type="hidden">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">建筑户型 *</label>
+                                                            <div class="col-sm-5">
+                                                                <select class="form-control required" name="jzhx" th:with="type=${@dict.getType('project_jzhx')}">
+                                                                    <option value="">请选择</option>
+                                                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"> </option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label ">单层建筑面积 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="dcjzmj" class="form-control required" type="text">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m²</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">地上建筑层数 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="dsjzcs" class="form-control required" type="text">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">层</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">机电集成（多选） *</label>
+                                                            <div class="col-sm-5" >
+                                                                <select class="form-control noselect2 selectpicker required" multiple name="jdjc" data-none-selected-text="请选择" th:with="type=${@dict.getType('project_jdjc')}">
+                                                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">地上建筑高度 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="dsjzgd" class="form-control required" type="text">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">户型数 *</label>
+                                                            <div class="col-sm-5">
+                                                                <select class="form-control required" name="hxs" id="hxs" onchange="changeOption()">
+                                                                    <option>1</option>
+                                                                    <option selected>2</option>
+                                                                    <option>3</option>
+                                                                    <option>4</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group" id="layout1" >
+                                                            <label class="col-sm-6 control-label">户型一面积</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="hx1" class="form-control" type="text" >
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m²</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group" id="layout3" style="display: none">
+                                                            <label class="col-sm-6 control-label">户型三面积</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="hx3" class="form-control" type="text">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m²</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">成本增量 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="cbzl" class="form-control required" type="text">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">核心筒 *</label>
+                                                            <div class="col-sm-5">
+                                                                <select class="form-control required" name="hxt" th:with="type=${@dict.getType('project_hxt')}">
+                                                                    <option value="">请选择</option>
+                                                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">预制构件（多选） *</label>
+                                                            <div class="col-sm-5" >
+                                                                <select class="form-control noselect2 selectpicker required" multiple name="yzgj" data-none-selected-text="请选择" th:with="type=${@dict.getType('project_yzgj')}">
+                                                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">层高 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="cg" class="form-control required" type="text">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m</label>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">结构体系 *</label>
+                                                            <div class="col-sm-5">
+                                                                <select class="form-control required" name="jgtx" th:with="type=${@dict.getType('project_jgtx')}">
+                                                                    <option value="">请选择</option>
+                                                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">装配率要求 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="zplyq" class="form-control required" type="text">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">%</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group" id="layout2" >
+                                                            <label class="col-sm-6 control-label">户型二面积</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="hx2" class="form-control" type="text">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m²</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group" id="layout4" style="display: none">
+                                                            <label class="col-sm-6 control-label">户型四面积</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="hx4" class="form-control" type="text">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m²</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <h1>项目效果图</h1>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">项目效果图 *</label>
+                                                    <div class="col-sm-9">
+                                                        <input id="project-view-file" name="project-view-file" type="file"  data-min-file-count="1" data-theme="fas" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+     <th:block th:include="include :: jquery-steps-js" />
+     <th:block th:include="include :: bootstrap-select-js" />
+     <th:block th:include="include :: bootstrap-fileinput-js" />
+     <th:block th:include="include :: distpicker-js" />
+     <script th:src="@{/js/jquery-ui-1.10.4.min.js}"></script>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('scheme:info:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('scheme:info:remove')}]];
+        var datas1 = [[${@dict.getType('project_jdjc')}]];
+        var datas2 = [[${@dict.getType('project_hxt')}]];
+        var datas3 = [[${@dict.getType('project_jzhx')}]];
+        var datas4 = [[${@dict.getType('project_yzgj')}]];
+        var datas5 = [[${@dict.getType('project_jgtx')}]];
+        var prefix = ctx + "scheme/info";
+        var prefix1 = ctx + "scheme/adinfo";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "项目创建",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'pjtid', 
+                    title : '项目主键',
+                    visible: false
+                },
+                {
+                    field : 'pjtNm', 
+                    title : '项目名',
+                    width :  150
+                },
+                {
+                    field : 'pjtAddress', 
+                    title : '项目地址',
+                    width :  40
+                },
+                {
+                    field : 'cbzl', 
+                    title : '成本增量'
+                },
+                {
+                    field : 'jzhx', 
+                    title : '建筑户型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas3, value);
+                    }
+                },
+                {
+                    field : 'hxt', 
+                    title : '核心筒',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas2, value);
+                    }
+                },
+                {
+                    field : 'yzgj', 
+                    title : '预制构件',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas4, value);
+                    },
+                    visible: false
+                },
+                {
+                    field : 'jdjc', 
+                    title : '机电集成',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas1, value);
+                    },
+                    visible: false
+                },
+                {
+                    field : 'kfs', 
+                    title : '开发商'
+                },
+                {
+                    field : 'cg', 
+                    title : '层高'
+                },
+                {
+                    field : 'dcjzmj', 
+                    title : '单层建筑面积',
+                    width :  40
+                },
+                {
+                    field : 'dsjzcs', 
+                    title : '地上建筑层数',
+                    width :  40
+                },
+                {
+                    field : 'jgtx', 
+                    title : '结构体系',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas5, value);
+                    }
+                },
+                {
+                    field : 'dsjzgd', 
+                    title : '地上建筑高度'
+                },
+                {
+                    field : 'zplyq', 
+                    title : '装配率要求'
+                },
+                {
+                    field : 'hxs', 
+                    title : '户型数'
+                },
+                {
+                    field : 'hx1', 
+                    title : '户型1',
+                    visible: false
+                },
+                {
+                    field : 'hx2', 
+                    title : '户型1',
+                    visible: false
+                },
+                {
+                    field : 'hx3', 
+                    title : '户型3',
+                    visible: false
+                },
+                {
+                    field : 'hx4', 
+                    title : '户型4',
+                    visible: false
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间',
+                    visible: false
+                },
+                {
+                    field : 'creator',
+                    title : '创建人',
+                    visible: false
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    width :  280,
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="addFile(\'' + row.pjtid + '\')"><i class="fa fa-upload"></i> 文件管理</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="addComponent(\'' + row.pjtid + '\')"><i class="fa fa-lock"></i> 绑定构件</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="addNode(\'' + row.pjtid + '\')"><i class="fa fa-lock"></i> 绑定节点</a> ');
+                        actions.push('<div class="dropup " style="padding-top: 5px">' +
+                                    '<a class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown"><i class="fa fa-sitemap"></i> 更多...</a>' +
+                                    '<ul class="dropdown-menu">' +
+                                    '<li><a onclick="importScheme(\'' + row.pjtid + '\')"><i class="fa fa-table"></i>导入方案对比数据</a></li>' +
+                                    '<li><a onclick="importScheme(\'' + row.pjtid + '\')"><i class="fa fa-list"></i>导入成本分析数据</a></li>' +
+                                    '</ul>' +
+                                    '</div>'
+                                    );
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        function addFile(id) {
+            var url = '/scheme/file/detail/'+id;
+            $.modal.openTab("文件管理", url);
+        };
+        function addComponent(id) {
+            var url = prefix+'/bindingComponent/' + id;
+            $.modal.openTab("绑定构件", url);
+        }
+
+        function addNode(id) {
+            var url = prefix+'/bindingComponentNode/' + id;
+            $.modal.openTab("绑定节点", url);
+        }
+        function importScheme(id) {
+            var url = prefix1+'/importScheme/' + id;
+            $.modal.openTab("导入方案对比数据", url);
+        }
+        function importCost(id) {
+            var url = prefix+'/bindingComponent/' + id;
+            $.modal.openTab("绑定构件", url);
+        }
+
+        function changeOption(){
+            //获取被选中的option标签
+            var vs = $('#hxs  option:selected').val();
+            if(vs == 1)
+            {
+                $("#layout1").show();
+                $("#layout2").hide();
+                $("#layout3").hide();
+                $("#layout4").hide();
+            }
+            if(vs == 2)
+            {
+                $("#layout1").show();
+                $("#layout2").show();
+                $("#layout3").hide();
+                $("#layout4").hide();
+            }
+            if(vs == 3)
+            {
+                $("#layout1").show();
+                $("#layout2").show();
+                $("#layout3").show();
+                $("#layout4").hide();
+            }
+            if(vs == 4)
+            {
+                $("#layout1").show();
+                $("#layout2").show();
+                $("#layout3").show();
+                $("#layout4").show();
+            }
+        }
+        $(document).ready(function () {
+            //$("#wizard").steps();
+            $("#form").steps({
+                bodyTag: "fieldset",
+                transitionEffect: "slideLeft",
+                autoFocus: true,
+                onStepChanging: function (event, currentIndex, newIndex) {
+                    if (currentIndex > newIndex) {
+                        return true
+                    }
+                    if (newIndex === 3 && Number($("#age").val()) < 18) {
+                        return false
+                    }
+                    var form = $(this);
+                    if (currentIndex < newIndex) {
+                        $(".body:eq(" + newIndex + ") label.error", form).remove();
+                        $(".body:eq(" + newIndex + ") .error", form).removeClass("error")
+                    }
+                    form.validate().settings.ignore = ":disabled,:hidden";
+                    return form.valid()
+                },
+                onStepChanged: function (event, currentIndex, priorIndex) {
+                    if (currentIndex === 2 && Number($("#age").val()) >= 18) {
+                        $(this).steps("next")
+                    }
+                    if (currentIndex === 2 && priorIndex === 3) {
+                        $(this).steps("previous")
+                    }
+                },
+                onFinishing: function (event, currentIndex) {
+                    var form = $(this);
+                    form.validate().settings.ignore = ":disabled";
+                    return form.valid()
+                },
+                onFinished: function (event, currentIndex) {
+                    if ($.validate.form()) {
+                        $("#project-view-file").fileinput('upload');//通过file-upload插件附带数据上传
+                        $('#myModal').modal('hide');
+                  /*      setTimeout(function (){
+                            window.location.reload();
+                        }, 500);*/
+                    }
+                }
+            }).validate({
+                ignore:":hidden:not(select)",
+                errorPlacement: function (error, element) {
+                    element.before(error)
+                }, rules: {confirm: {equalTo: "#password"}}
+            });
+            $("#project-view-file").fileinput({
+                theme: 'explorer-fas',
+                language: 'zh',
+                uploadUrl: prefix+'/add',
+                showUpload: false,//去除上传按钮
+                overwriteInitial: true,
+                //initialPreviewAsData: true,
+                maxFileCount:10,
+                uploadAsync:true,
+                allowedFileExtensions: ['jpg', 'png'],
+                dropZoneTitle:'拖拽图形文件到这里 &hellip;<br>支持格式：.png/.jpg',
+                previewSettings: { image: {width: "100px", height: "100px"}},
+                layoutTemplates: {
+                    actionUpload: '',//去除上传按钮
+                    actionDelete: '',//去除删除按钮
+                },
+                uploadExtraData:function () {           //传参
+                    var data = {
+                        "formData": $('#form').serialize(),      //此处自定义传参
+                    };
+                    return data;
+                }
+            });
+        });
+        // 在模态框出现后添加可拖拽功能
+        $(document).on("show.bs.modal", ".modal", function() {
+            // draggable 属性规定元素是否可拖动
+            $(this).draggable({
+                handle: ".modal-header", // 只能点击头部拖动
+                cursor: 'move' //光标呈现为指示链接的指针（一只手）,
+            });
+            $(this).css("overflow", "hidden"); // 防止出现滚动条，出现的话，你会把滚动条一起拖着走的
+        });
+    </script>
+        </div>
+    </div>
+</body>
+</html>

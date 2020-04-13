@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增项目文件管理')" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-file-add">
+            <input name="pjtid" th:field="*{selectProject.pjtid}" type="hidden">
+            <div class="form-group">
+                <h1 align="center" th:text="*{selectProject.pjtNm}"></h1>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">文件分类：</label>
+                <div class="col-sm-8">
+                    <select name="fileType" id="fileType" class="form-control m-b" th:with="type=${@dict.getType('file_type')}" required>
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">文件 *</label>
+                <div class="col-sm-8">
+                    <input id="project-file" name="project-file" type="file"  data-min-file-count="1" data-theme="fas" >
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-fileinput-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "scheme/file"
+        var allowedFileExtensionsValue = ['jpg', 'png','dwg','rvt','3dm','ifc'];
+        var dropZoneTitleValue ='拖拽文件到这里 &hellip;<br>支持格式：.dwg/.png/.jpg/.rvt/.3dm/.ifc';
+
+        $(document).ready(function () {
+            $("#project-file").fileinput({
+                theme: 'explorer-fas',
+                language: 'zh',
+                uploadUrl: prefix+'/add',
+                showUpload: false,//去除上传按钮
+                overwriteInitial: true,
+                initialPreviewAsData: true,
+                //allowedFileTypes: ['image'],
+                layoutTemplates: {
+                    actionUpload: '',//去除上传按钮
+                    actionDelete: '',//去除删除按钮
+                },
+                allowedFileExtensions: allowedFileExtensionsValue,
+                dropZoneTitle:dropZoneTitleValue,
+                uploadExtraData:function () {           //传参
+                    var data = {
+                        "formData": $('#form-file-add').serialize(),      //此处自定义传参
+                    };
+                    return data;
+                }
+            }).on('fileuploaded', function(event, data, previewId, index) {
+                $.modal.close();
+                var parent = window.parent;
+                parent.$.table.refresh();
+            });
+        });
+
+        $("#fileType").on("change",function () {
+            switch ($(this).val()) {
+                case "1":
+                    allowedFileExtensionsValue=['rvt', 'ifc','rfa'];
+                    dropZoneTitleValue ='拖拽文件到这里 &hellip;<br>支持格式：.rvt/.ifc/.rfa';
+                    break
+                case "2":
+                    allowedFileExtensionsValue=['dwg','dxf'];
+                    dropZoneTitleValue ='拖拽文件到这里 &hellip;<br>支持格式：.dwg/.dxf';
+                    break
+
+            }
+            $('#project-file').fileinput('refresh',{allowedFileExtensions: allowedFileExtensionsValue,dropZoneTitle:dropZoneTitleValue});
+        })
+
+        $("#form-file-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $("#project-file").fileinput('upload');//on()是事件，fileinput()是方法
+                $('#project-file').on('fileuploaded', function(event, data, previewId, index) {
+                    $.modal.close();
+                    var parent = window.parent;
+                    parent.$.table.refresh();
+                    console.log('File uploaded triggered');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

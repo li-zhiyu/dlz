@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改项目参数')" />
+    <th:block th:include="include :: bootstrap-select-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-info-edit" th:object="${tProjectInfo}">
+            <input name="pjtid" th:field="*{pjtid}" type="hidden">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">项目名称 *</label>
+                        <div class="col-sm-9">
+                            <input id="pjtNm" name="pjtNm" type="text" class="form-control required" th:field="*{pjtNm}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">项目地址 *</label>
+                        <div class="col-sm-9" >
+                            <input id="pjtAddress" name="pjtAddress" type="text" class="form-control required" th:field="*{pjtAddress}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">开发商 *</label>
+                        <div class="col-sm-9">
+                            <input id="kfs" name="kfs" type="text" class="form-control required" th:field="*{kfs}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">建筑户型 *</label>
+                                <div class="col-sm-5">
+                                    <select class="form-control" name="jzhx" th:with="type=${@dict.getType('project_jzhx')}">
+                                        <option value="">请选择</option>
+                                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{jzhx}"> </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">单层建筑面积 *</label>
+                                <div class="col-sm-5">
+                                    <input name="dcjzmj" class="form-control required" type="text" value="500" th:field="*{dcjzmj}">
+                                </div>
+                                <label class="col-sm-1 control-label">m²</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">地上建筑层数 *</label>
+                                <div class="col-sm-5">
+                                    <input name="dsjzcs" class="form-control required" type="text" th:field="*{dsjzcs}">
+                                </div>
+                                <label class="col-sm-1 control-label">层</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">机电集成（多选） *</label>
+                                <div class="col-sm-5" >
+                                    <select class="form-control noselect2 selectpicker" multiple name="jdjc" data-none-selected-text="请选择" th:with="type=${@dict.getType('project_jdjc')}">
+                                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{jdjc}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">地上建筑高度 *</label>
+                                <div class="col-sm-5">
+                                    <input name="dsjzgd" class="form-control required" type="text" th:field="*{dsjzgd}">
+                                </div>
+                                <label class="col-sm-1 control-label">m</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">户型数 *</label>
+                                <div class="col-sm-5">
+                                    <select class="form-control" name="hxs" id="hxs" onchange="changeOption()">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" id="layout1" >
+                                <label class="col-sm-6 control-label">户型一面积</label>
+                                <div class="col-sm-5">
+                                    <input name="hx1" class="form-control" type="text" th:field="*{hx1}">
+                                </div>
+                                <label class="col-sm-1 control-label">m²</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" id="layout3" style="display: none">
+                                <label class="col-sm-6 control-label">户型三面积</label>
+                                <div class="col-sm-5">
+                                    <input name="hx3" class="form-control" type="text" th:field="*{hx3}">
+                                </div>
+                                <label class="col-sm-1 control-label">m²</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">成本增量 *</label>
+                                <div class="col-sm-5">
+                                    <input name="cbzl" class="form-control" type="text" th:field="*{cbzl}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">核心筒 *</label>
+                                <div class="col-sm-5">
+                                    <select class="form-control" name="hxt" th:with="type=${@dict.getType('project_hxt')}" th:field="*{hxt}">
+                                        <option value="">请选择</option>
+                                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">预制构件（多选） *</label>
+                                <div class="col-sm-5" >
+                                    <select class="form-control noselect2 selectpicker" multiple name="yzgj" data-none-selected-text="请选择" th:with="type=${@dict.getType('project_yzgj')}" >
+                                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{yzgj}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">层高 *</label>
+                                <div class="col-sm-5">
+                                    <input name="cg" class="form-control" type="text" th:field="*{cg}">
+                                </div>
+                                <label class="col-sm-1 control-label">m</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">结构体系 *</label>
+                                <div class="col-sm-5">
+                                    <select class="form-control" name="jgtx" th:with="type=${@dict.getType('project_jgtx')}" th:field="*{jgtx}">
+                                        <option value="">请选择</option>
+                                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">装配率要求 *</label>
+                                <div class="col-sm-5">
+                                    <input name="zplyq" class="form-control" type="text" th:field="*{zplyq}">
+                                </div>
+                                <label class="col-sm-1 control-label">%</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" id="layout2" >
+                                <label class="col-sm-6 control-label">户型二面积</label>
+                                <div class="col-sm-5">
+                                    <input name="hx2" class="form-control" type="text" th:field="*{hx2}">
+                                </div>
+                                <label class="col-sm-1 control-label">m²</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" id="layout4" style="display: none">
+                                <label class="col-sm-6 control-label">户型四面积</label>
+                                <div class="col-sm-5">
+                                    <input name="hx4" class="form-control" type="text" th:field="*{hx4}">
+                                </div>
+                                <label class="col-sm-1 control-label">m²</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-select-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "scheme/info";
+        $("#form-info-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-info-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TProjectInfoMapper">
+    
+    <resultMap type="TProjectInfo" id="TProjectInfoResult">
+        <result property="pjtid"    column="PJTID"    />
+        <result property="pjtNm"    column="PJT_NM"    />
+        <result property="pjtAddress"    column="PJT_ADDRESS"    />
+        <result property="provinceId"    column="PROVINCE_ID"    />
+        <result property="province"    column="PROVINCE"    />
+        <result property="cityId"    column="CITY_ID"    />
+        <result property="city"    column="CITY"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="creator"    column="CREATOR"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="cbzl"    column="CBZL"    />
+        <result property="jzhx"    column="JZHX"    />
+        <result property="hxt"    column="HXT"    />
+        <result property="yzgj"    column="YZGJ"    />
+        <result property="jdjc"    column="JDJC"    />
+        <result property="kfs"    column="KFS"    />
+        <result property="cg"    column="CG"    />
+        <result property="dcjzmj"    column="DCJZMJ"    />
+        <result property="dsjzcs"    column="DSJZCS"    />
+        <result property="jgtx"    column="JGTX"    />
+        <result property="dsjzgd"    column="DSJZGD"    />
+        <result property="zplyq"    column="ZPLYQ"    />
+        <result property="hxs"    column="HXS"    />
+        <result property="hx1"    column="HX1"    />
+        <result property="hx2"    column="HX2"    />
+        <result property="hx3"    column="HX3"    />
+        <result property="hx4"    column="HX4"    />
+        <result property="tblPath"    column="TBL_PATH"    />
+        <result property="path"    column="PATH"    />
+    </resultMap>
+
+    <sql id="selectTProjectInfoVo">
+        select PJTID, PJT_NM, PJT_ADDRESS, PROVINCE_ID, PROVINCE, CITY_ID, CITY, CREATE_TIME, CREATOR, REMARK, CBZL, JZHX, HXT, YZGJ, JDJC, KFS, CG, DCJZMJ, DSJZCS, JGTX, DSJZGD, ZPLYQ, HXS, HX1, HX2, HX3, HX4, TBL_PATH, PATH from t_project_info
+    </sql>
+
+    <select id="selectTProjectInfoList" parameterType="TProjectInfo" resultMap="TProjectInfoResult">
+        <include refid="selectTProjectInfoVo"/>
+        <where>  
+            <if test="pjtid != null  and pjtid != ''"> and PJTID = #{pjtid}</if>
+            <if test="pjtNm != null  and pjtNm != ''"> and PJT_NM = #{pjtNm}</if>
+            <if test="pjtAddress != null  and pjtAddress != ''"> and PJT_ADDRESS = #{pjtAddress}</if>
+            <if test="provinceId != null  and provinceId != ''"> and PROVINCE_ID = #{provinceId}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="cityId != null  and cityId != ''"> and CITY_ID = #{cityId}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="creator != null  and creator != ''"> and CREATOR = #{creator}</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+            <if test="cbzl != null  and cbzl != ''"> and CBZL = #{cbzl}</if>
+            <if test="jzhx != null  and jzhx != ''"> and JZHX = #{jzhx}</if>
+            <if test="hxt != null  and hxt != ''"> and HXT = #{hxt}</if>
+            <if test="yzgj != null  and yzgj != ''"> and YZGJ = #{yzgj}</if>
+            <if test="jdjc != null  and jdjc != ''"> and JDJC = #{jdjc}</if>
+            <if test="kfs != null  and kfs != ''"> and KFS = #{kfs}</if>
+            <if test="cg != null  and cg != ''"> and CG = #{cg}</if>
+            <if test="dcjzmj != null  and dcjzmj != ''"> and DCJZMJ = #{dcjzmj}</if>
+            <if test="dsjzcs != null  and dsjzcs != ''"> and DSJZCS = #{dsjzcs}</if>
+            <if test="jgtx != null  and jgtx != ''"> and JGTX = #{jgtx}</if>
+            <if test="dsjzgd != null  and dsjzgd != ''"> and DSJZGD = #{dsjzgd}</if>
+            <if test="zplyq != null  and zplyq != ''"> and ZPLYQ = #{zplyq}</if>
+            <if test="hxs != null  and hxs != ''"> and HXS = #{hxs}</if>
+            <if test="hx1 != null  and hx1 != ''"> and HX1 = #{hx1}</if>
+            <if test="hx2 != null  and hx2 != ''"> and HX2 = #{hx2}</if>
+            <if test="hx3 != null  and hx3 != ''"> and HX3 = #{hx3}</if>
+            <if test="hx4 != null  and hx4 != ''"> and HX4 = #{hx4}</if>
+            <if test="tblPath != null  and tblPath != ''"> and TBL_PATH = #{tblPath}</if>
+            <if test="path != null  and path != ''"> and PATH = #{path}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProjectInfoById" parameterType="String" resultMap="TProjectInfoResult">
+        <include refid="selectTProjectInfoVo"/>
+        where PJTID = #{pjtid}
+    </select>
+        
+    <insert id="insertTProjectInfo" parameterType="TProjectInfo">
+        insert into t_project_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pjtid != null  and pjtid != ''">PJTID,</if>
+            <if test="pjtNm != null  and pjtNm != ''">PJT_NM,</if>
+            <if test="pjtAddress != null  and pjtAddress != ''">PJT_ADDRESS,</if>
+            <if test="provinceId != null  and provinceId != ''">PROVINCE_ID,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            <if test="cityId != null  and cityId != ''">CITY_ID,</if>
+            <if test="city != null  and city != ''">CITY,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="creator != null  and creator != ''">CREATOR,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+            <if test="cbzl != null  and cbzl != ''">CBZL,</if>
+            <if test="jzhx != null  and jzhx != ''">JZHX,</if>
+            <if test="hxt != null  and hxt != ''">HXT,</if>
+            <if test="yzgj != null  and yzgj != ''">YZGJ,</if>
+            <if test="jdjc != null  and jdjc != ''">JDJC,</if>
+            <if test="kfs != null  and kfs != ''">KFS,</if>
+            <if test="cg != null  and cg != ''">CG,</if>
+            <if test="dcjzmj != null  and dcjzmj != ''">DCJZMJ,</if>
+            <if test="dsjzcs != null  and dsjzcs != ''">DSJZCS,</if>
+            <if test="jgtx != null  and jgtx != ''">JGTX,</if>
+            <if test="dsjzgd != null  and dsjzgd != ''">DSJZGD,</if>
+            <if test="zplyq != null  and zplyq != ''">ZPLYQ,</if>
+            <if test="hxs != null  and hxs != ''">HXS,</if>
+            <if test="hx1 != null  and hx1 != ''">HX1,</if>
+            <if test="hx2 != null  and hx2 != ''">HX2,</if>
+            <if test="hx3 != null  and hx3 != ''">HX3,</if>
+            <if test="hx4 != null  and hx4 != ''">HX4,</if>
+            <if test="tblPath != null  and tblPath != ''">TBL_PATH,</if>
+            <if test="path != null  and path != ''">PATH,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pjtid != null  and pjtid != ''">#{pjtid},</if>
+            <if test="pjtNm != null  and pjtNm != ''">#{pjtNm},</if>
+            <if test="pjtAddress != null  and pjtAddress != ''">#{pjtAddress},</if>
+            <if test="provinceId != null  and provinceId != ''">#{provinceId},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="cityId != null  and cityId != ''">#{cityId},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="creator != null  and creator != ''">#{creator},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="cbzl != null  and cbzl != ''">#{cbzl},</if>
+            <if test="jzhx != null  and jzhx != ''">#{jzhx},</if>
+            <if test="hxt != null  and hxt != ''">#{hxt},</if>
+            <if test="yzgj != null  and yzgj != ''">#{yzgj},</if>
+            <if test="jdjc != null  and jdjc != ''">#{jdjc},</if>
+            <if test="kfs != null  and kfs != ''">#{kfs},</if>
+            <if test="cg != null  and cg != ''">#{cg},</if>
+            <if test="dcjzmj != null  and dcjzmj != ''">#{dcjzmj},</if>
+            <if test="dsjzcs != null  and dsjzcs != ''">#{dsjzcs},</if>
+            <if test="jgtx != null  and jgtx != ''">#{jgtx},</if>
+            <if test="dsjzgd != null  and dsjzgd != ''">#{dsjzgd},</if>
+            <if test="zplyq != null  and zplyq != ''">#{zplyq},</if>
+            <if test="hxs != null  and hxs != ''">#{hxs},</if>
+            <if test="hx1 != null  and hx1 != ''">#{hx1},</if>
+            <if test="hx2 != null  and hx2 != ''">#{hx2},</if>
+            <if test="hx3 != null  and hx3 != ''">#{hx3},</if>
+            <if test="hx4 != null  and hx4 != ''">#{hx4},</if>
+            <if test="tblPath != null  and tblPath != ''">#{tblPath},</if>
+            <if test="path != null  and path != ''">#{path},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProjectInfo" parameterType="TProjectInfo">
+        update t_project_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pjtNm != null  and pjtNm != ''">PJT_NM = #{pjtNm},</if>
+            <if test="pjtAddress != null  and pjtAddress != ''">PJT_ADDRESS = #{pjtAddress},</if>
+            <if test="provinceId != null  and provinceId != ''">PROVINCE_ID = #{provinceId},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="cityId != null  and cityId != ''">CITY_ID = #{cityId},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="creator != null  and creator != ''">CREATOR = #{creator},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+            <if test="cbzl != null  and cbzl != ''">CBZL = #{cbzl},</if>
+            <if test="jzhx != null  and jzhx != ''">JZHX = #{jzhx},</if>
+            <if test="hxt != null  and hxt != ''">HXT = #{hxt},</if>
+            <if test="yzgj != null  and yzgj != ''">YZGJ = #{yzgj},</if>
+            <if test="jdjc != null  and jdjc != ''">JDJC = #{jdjc},</if>
+            <if test="kfs != null  and kfs != ''">KFS = #{kfs},</if>
+            <if test="cg != null  and cg != ''">CG = #{cg},</if>
+            <if test="dcjzmj != null  and dcjzmj != ''">DCJZMJ = #{dcjzmj},</if>
+            <if test="dsjzcs != null  and dsjzcs != ''">DSJZCS = #{dsjzcs},</if>
+            <if test="jgtx != null  and jgtx != ''">JGTX = #{jgtx},</if>
+            <if test="dsjzgd != null  and dsjzgd != ''">DSJZGD = #{dsjzgd},</if>
+            <if test="zplyq != null  and zplyq != ''">ZPLYQ = #{zplyq},</if>
+            <if test="hxs != null  and hxs != ''">HXS = #{hxs},</if>
+            <if test="hx1 != null  and hx1 != ''">HX1 = #{hx1},</if>
+            <if test="hx2 != null  and hx2 != ''">HX2 = #{hx2},</if>
+            <if test="hx3 != null  and hx3 != ''">HX3 = #{hx3},</if>
+            <if test="hx4 != null  and hx4 != ''">HX4 = #{hx4},</if>
+            <if test="tblPath != null  and tblPath != ''">TBL_PATH = #{tblPath},</if>
+            <if test="path != null  and path != ''">PATH = #{path},</if>
+        </trim>
+        where PJTID = #{pjtid}
+    </update>
+
+    <delete id="deleteTProjectInfoById" parameterType="String">
+        delete from t_project_info where PJTID = #{pjtid}
+    </delete>
+
+    <delete id="deleteTProjectInfoByIds" parameterType="String">
+        delete from t_project_info where PJTID in 
+        <foreach item="pjtid" collection="array" open="(" separator="," close=")">
+            #{pjtid}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件预览</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/animate.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body class="gray-bg">
+    <div class="container-div">
+        <div id="domId" style="width:800px; height:630px"></div>
+        <script src="https://static.bimface.com/api/BimfaceSDKLoader/BimfaceSDKLoader@latest-release.js" charset="utf-8"></script>
+        <th:block th:include="include :: footer" />
+        <script>
+            var viewer2D;
+            var app;
+            var viewToken='[[${viewtoken}]]';
+            var loaderConfig = new BimfaceSDKLoaderConfig();
+            loaderConfig.viewToken = viewToken;
+            BimfaceSDKLoader.load(loaderConfig, successCallback, failureCallback);
+            function successCallback(viewMetaData) {
+                var domShow = document.getElementById('domId');
+                var WebAppConfig = new Glodon.Bimface.Application.WebApplicationDrawingConfig();
+                WebAppConfig.domElement = domShow;
+                app = new Glodon.Bimface.Application.WebApplicationDrawing(WebAppConfig);
+                app.load(viewToken);
+                viewer2D = app.getViewer();
+            };
+
+            function failureCallback(error) {
+                console.log(error);
+            };
+            function submitHandler() {
+                $.modal.close();
+            }
+        </script>
+    </div>
+</body>
+</html>

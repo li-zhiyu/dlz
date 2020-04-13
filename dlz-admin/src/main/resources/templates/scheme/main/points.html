@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('积分管理')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-main-edit" th:object="${tBptMain}">
+            <input name="bptid" th:field="*{bptid}" type="hidden">
+            <div class="form-group">
+                <div class="ibox-content" align="center">
+                    <h1 class="no-margins text-success" id="area" th:text="${eara}">600</h1>
+                    <small>单层建筑面积</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">模型深度：</label>
+                <div class="col-sm-8">
+                    <select name="modelLevel" id="modelLevel" class="form-control m-b" th:with="type=${@dict.getType('model_level')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">构件类型：</label>
+                <div class="col-sm-8">
+                    <select name="componentType" id="componentType" class="form-control m-b" th:with="type=${@dict.getType('component_type')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">时间排序：</label>
+                <div class="col-sm-8">
+                    <select name="order" id="order" class="form-control m-b" th:with="type=${@dict.getType('model_upload_order')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" align="center" id="genaratePoint">
+                <a class="btn btn-warning btn-rounded" onclick="generatePoint()" >生成总积分</a>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 总结分 = 5 x 建筑面积 x 模型深度系数 x 构件类型系数 x 模型上传排序系数</span>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "scheme/main";
+        $("#form-main-edit").validate({
+            focusCleanup: true,
+            rules:{
+                modelLevel:"required",
+                componentType:"required",
+                order:{
+                    required:true
+                }
+            },
+            messages:{
+                modelLevel:"必选一项",
+                componentType:"必选一项",
+                order:{
+                    required: "必选一项"
+                }
+            }
+        });
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-main-edit').serialize());
+                $.modal.close();
+            }
+        }
+        
+        function generatePoint() {
+            if($.validate.form())
+            {
+                var actions = [];
+                var point = $("#area").text() * $("#modelLevel").val() * $("#componentType").val() * $("#order").val();
+                point = point.toFixed(2);
+                actions.push('<h1 class="no-margins text-info" align="center" >' + point + '</h1>');
+                $("#genaratePoint").next().remove();
+                $("#genaratePoint").after(actions);
+            }
+
+        }
+    </script>
+</body>
+</html>

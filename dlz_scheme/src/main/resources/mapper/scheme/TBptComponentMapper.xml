@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TBptComponentMapper">
+    
+    <resultMap type="TBptComponent" id="TBptComponentResult">
+        <result property="cpid"    column="CPID"    />
+        <result property="cpNm"    column="CP_NM"    />
+        <result property="cpNo"    column="CP_NO"    />
+        <result property="cpType"    column="CP_TYPE"    />
+        <result property="cpType2"    column="CP_TYPE_2"    />
+        <result property="fileNm"    column="FILE_NM"    />
+        <result property="path"    column="PATH"    />
+        <result property="memo"    column="MEMO"    />
+        <result property="tblPath"    column="TBL_PATH"    />
+        <result property="editDate"    column="EDIT_DATE"    />
+        <result property="length"    column="LENGTH"    />
+        <result property="width"    column="WIDTH"    />
+        <result property="heigth"    column="HEIGTH"    />
+        <result property="weigth"    column="WEIGTH"    />
+    </resultMap>
+
+
+    <sql id="selectTBptComponentVo">
+        select CPID, CP_NM, CP_NO, CP_TYPE,CP_TYPE_2, FILE_NM, PATH, MEMO, TBL_PATH, EDIT_DATE, LENGTH, WIDTH, HEIGTH, WEIGTH from t_bpt_component
+    </sql>
+
+    <select id="selectTBptComponentList" parameterType="TBptComponent" resultMap="TBptComponentResult">
+        <include refid="selectTBptComponentVo"/>
+        <where>  
+            <if test="cpNm != null  and cpNm != ''"> and CP_NM = #{cpNm}</if>
+            <if test="cpNo != null  and cpNo != ''"> and CP_NO = #{cpNo}</if>
+            <if test="cpType != null  and cpType != ''"> and CP_TYPE = #{cpType}</if>
+            <if test="cpType2 != null  and cpType2 != ''"> and CP_TYPE_2 = #{cpType2}</if>
+            <if test="fileNm != null  and fileNm != ''"> and FILE_NM = #{fileNm}</if>
+            <if test="path != null  and path != ''"> and PATH = #{path}</if>
+            <if test="memo != null  and memo != ''"> and MEMO = #{memo}</if>
+            <if test="tblPath != null  and tblPath != ''"> and TBL_PATH = #{tblPath}</if>
+            <if test="params.beginEditDate != null and params.beginEditDate != ''"><!-- 开始时间检索 -->
+                AND date_format(EDIT_DATE,'%y%m%d') &gt;= date_format(#{params.beginEditDate},'%y%m%d')
+            </if>
+            <if test="params.endEditDate != null and params.endEditDate != ''"><!-- 结束时间检索 -->
+                AND date_format(EDIT_DATE,'%y%m%d') &lt;= date_format(#{params.endEditDate},'%y%m%d')
+            </if>
+            <if test="length != null  and length != ''"> and LENGTH = #{length}</if>
+            <if test="width != null  and width != ''"> and WIDTH = #{width}</if>
+            <if test="heigth != null  and heigth != ''"> and HEIGTH = #{heigth}</if>
+            <if test="weigth != null  and weigth != ''"> and WEIGTH = #{weigth}</if>
+        </where>
+    </select>
+
+    <select id="selectTBptComponentUnbindList" parameterType="TBptComponent" resultMap="TBptComponentResult">
+        select CPID, CP_NM, CP_NO, CP_TYPE,CP_TYPE_2, FILE_NM, PATH, MEMO, TBL_PATH, EDIT_DATE, LENGTH, WIDTH, HEIGTH, WEIGTH
+        from t_bpt_component t1
+        where CPID not in (select t2.CPID FROM t_project_component t2 where t2.PJTID = #{pjtid})
+        <if test="cpNm != null  and cpNm != ''"> and CP_NM = #{cpNm}</if>
+        <if test="cpType != null  and cpType != ''"> and CP_TYPE = #{cpType}</if>
+    </select>
+
+
+    <select id="selectTBptComponentListBypjtid" parameterType="TBptComponent" resultMap="TBptComponentResult">
+        select t1.CPID, CP_NM, CP_NO, CP_TYPE,CP_TYPE_2, FILE_NM, PATH, MEMO, TBL_PATH, EDIT_DATE, LENGTH, WIDTH, HEIGTH, WEIGTH
+        from t_bpt_component t1
+        left join t_project_component t2 on t2.CPID = t1.CPID
+        where t2.PJTID=#{pjtid}
+        <if test="cpNm != null  and cpNm != ''"> and CP_NM = #{cpNm}</if>
+        <if test="cpType != null  and cpType != ''"> and CP_TYPE = #{cpType}</if>
+    </select>
+
+    
+    <select id="selectTBptComponentById" parameterType="Long" resultMap="TBptComponentResult">
+        <include refid="selectTBptComponentVo"/>
+        where CPID = #{cpid}
+    </select>
+        
+    <insert id="insertTBptComponent" parameterType="TBptComponent" useGeneratedKeys="true" keyProperty="cpid">
+        insert into t_bpt_component
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cpNm != null  and cpNm != ''">CP_NM,</if>
+            <if test="cpNo != null  and cpNo != ''">CP_NO,</if>
+            <if test="cpType != null  and cpType != ''">CP_TYPE,</if>
+            <if test="cpType2 != null  and cpType2 != ''">CP_TYPE_2,</if>
+            <if test="fileNm != null  and fileNm != ''">FILE_NM,</if>
+            <if test="path != null  and path != ''">PATH,</if>
+            <if test="memo != null  and memo != ''">MEMO,</if>
+            <if test="tblPath != null  and tblPath != ''">TBL_PATH,</if>
+            <if test="editDate != null ">EDIT_DATE,</if>
+            <if test="length != null  and length != ''">LENGTH,</if>
+            <if test="width != null  and width != ''">WIDTH,</if>
+            <if test="heigth != null  and heigth != ''">HEIGTH,</if>
+            <if test="weigth != null  and weigth != ''">WEIGTH,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cpNm != null  and cpNm != ''">#{cpNm},</if>
+            <if test="cpNo != null  and cpNo != ''">#{cpNo},</if>
+            <if test="cpType != null  and cpType != ''">#{cpType},</if>
+            <if test="cpType2 != null  and cpType2 != ''">#{cpType2},</if>
+            <if test="fileNm != null  and fileNm != ''">#{fileNm},</if>
+            <if test="path != null  and path != ''">#{path},</if>
+            <if test="memo != null  and memo != ''">#{memo},</if>
+            <if test="tblPath != null  and tblPath != ''">#{tblPath},</if>
+            <if test="editDate != null ">#{editDate},</if>
+            <if test="length != null  and length != ''">#{length},</if>
+            <if test="width != null  and width != ''">#{width},</if>
+            <if test="heigth != null  and heigth != ''">#{heigth},</if>
+            <if test="weigth != null  and weigth != ''">#{weigth},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTBptComponent" parameterType="TBptComponent">
+        update t_bpt_component
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cpNm != null  and cpNm != ''">CP_NM = #{cpNm},</if>
+            <if test="cpNo != null  and cpNo != ''">CP_NO = #{cpNo},</if>
+            <if test="cpType != null  and cpType != ''">CP_TYPE = #{cpType},</if>
+            <if test="cpType2 != null  and cpType2 != ''">CP_TYPE_2 = #{cpType2},</if>
+            <if test="fileNm != null  and fileNm != ''">FILE_NM = #{fileNm},</if>
+            <if test="path != null  and path != ''">PATH = #{path},</if>
+            <if test="memo != null  and memo != ''">MEMO = #{memo},</if>
+            <if test="tblPath != null  and tblPath != ''">TBL_PATH = #{tblPath},</if>
+            <if test="editDate != null ">EDIT_DATE = #{editDate},</if>
+            <if test="length != null  and length != ''">LENGTH = #{length},</if>
+            <if test="width != null  and width != ''">WIDTH = #{width},</if>
+            <if test="heigth != null  and heigth != ''">HEIGTH = #{heigth},</if>
+            <if test="weigth != null  and weigth != ''">WEIGTH = #{weigth},</if>
+        </trim>
+        where CPID = #{cpid}
+    </update>
+
+    <delete id="deleteTBptComponentById" parameterType="Long">
+        delete from t_bpt_component where CPID = #{cpid}
+    </delete>
+
+    <delete id="deleteTBptComponentByIds" parameterType="String">
+        delete from t_bpt_component where CPID in 
+        <foreach item="cpid" collection="array" open="(" separator="," close=")">
+            #{cpid}
+        </foreach>
+    </delete>
+
+    
+</mapper>

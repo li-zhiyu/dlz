@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TBptEschemeMapper">
+    
+    <resultMap id="TBptEschemeResult"  type="TBptEscheme">
+        <result column="BPEID"    property="bpeid"        />
+        <result column="BPTID"   property="bptid"    />
+        <result property="bpeNm"    column="BPE_NM"    />
+        <result property="creator"    column="CREATOR"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="remark"    column="REMARK"    />
+		<result property="bptNm"    column="BPT_NM"    />
+    </resultMap>
+    
+
+    <sql id="selectTBptEschemeVo">
+        select t1.BPEID, t1.BPTID , t1.BPE_NM, t1.CREATOR, t1.CREATE_TIME, t1.REMARK,t2.BPT_NM AS BPT_NM  from t_bpt_escheme t1
+        left join t_bpt_main t2 on t1.BPTID=t2.BPTID
+    </sql>
+
+    <select id="selectTBptEschemeList" parameterType="TBptEscheme" resultMap="TBptEschemeResult">
+        <include refid="selectTBptEschemeVo"/>
+        <where>  
+            <if test="bptid != null  and bptid != ''"> and BPTID = #{bptid}</if>
+            <if test="bpeNm != null  and bpeNm != ''"> and BPE_NM = #{bpeNm}</if>
+            <if test="creator != null  and creator != ''"> and CREATOR = #{creator}</if>
+        </where>
+    </select>
+    
+    <select id="selectTBptEschemeById" parameterType="Long" resultMap="TBptEschemeResult">
+        <include refid="selectTBptEschemeVo"/>
+        where BPEID = #{bpeid}
+    </select>
+        
+    <insert id="insertTBptEscheme" parameterType="TBptEscheme" useGeneratedKeys="true" keyProperty="bpeid">
+        insert into t_bpt_escheme
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bptid != null  and bptid != ''">BPTID,</if>
+            <if test="bpeNm != null  and bpeNm != ''">BPE_NM,</if>
+            <if test="creator != null  and creator != ''">CREATOR,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bptid != null  and bptid != ''">#{bptid},</if>
+            <if test="bpeNm != null  and bpeNm != ''">#{bpeNm},</if>
+            <if test="creator != null  and creator != ''">#{creator},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTBptEscheme" parameterType="TBptEscheme">
+        update t_bpt_escheme
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bptid != null  and bptid != ''">BPTID = #{bptid},</if>
+            <if test="bpeNm != null  and bpeNm != ''">BPE_NM = #{bpeNm},</if>
+            <if test="creator != null  and creator != ''">CREATOR = #{creator},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+        </trim>
+        where BPEID = #{bpeid}
+    </update>
+
+    <delete id="deleteTBptEschemeById" parameterType="Long">
+        delete from t_bpt_escheme where BPEID = #{bpeid}
+    </delete>
+
+    <delete id="deleteTBptEschemeByIds" parameterType="String">
+        delete from t_bpt_escheme where BPEID in 
+        <foreach item="bpeid" collection="array" open="(" separator="," close=")">
+            #{bpeid}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('选择要绑定的节点')" />
+</head>
+
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<input type="hidden" name="pjtid" id="pjtid" th:value="${pjtid}" >
+					<div class="select-list">
+						<ul>
+							<li>
+								<p>节点名：</p>
+								<input type="text" name="cpNm"/>
+							</li>
+							<li>
+								<p>类型：</p>
+								<select name="cnType" th:with="type=${@dict.getType('scheme_node')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+	        
+	        <div class="col-sm-12 select-table table-striped">
+			    <table id="bootstrap-table"></table>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+		var editFlag = [[${@permission.hasPermi('scheme:componentnode:edit')}]];
+		var removeFlag = [[${@permission.hasPermi('scheme:componentnode:remove')}]];
+		var datas = [[${@dict.getType('scheme_componentnode')}]];
+		var prefix = ctx + "scheme/componentnode";
+
+		$(function() {
+			var options = {
+				url: prefix + "/unbindlist",
+				modalName: "构件库管理",
+				columns: [{
+					checkbox: true
+				},
+				{
+					field : 'cnid',
+					title : '构件节点主键',
+					visible: false
+				},
+				{
+					field : 'cnNm',
+					title : '节点名'
+				},
+				{
+					field : 'cnNo',
+					title : '节点编码'
+				},
+				{
+					field : 'cnType',
+					title : '类型',
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(datas, value);
+					}
+				},
+				{
+					field : 'fileNm',
+					title : '文件名'
+				},
+				{
+					title: '图片',
+					formatter: function(value, row, index) {
+						return $.table.imageView(row.path);
+					}
+				}]
+			};
+			$.table.init(options);
+		});
+
+		
+		/* 添加用户-选择用户-提交 */
+		function submitHandler() {
+			var rows = $.table.selectFirstColumns();
+			if (rows.length == 0) {
+       			$.modal.alertWarning("请至少选择一条记录");
+       			return;
+       		}
+			var data = { "pjtid": $("#pjtid").val(), "cnids": rows.join() };
+			$.operate.save(prefix + "/bindAll", data);
+		}
+	</script>
+</body>
+</html>

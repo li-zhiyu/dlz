@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TBptDetailMapper">
+    
+    <resultMap type="TBptDetail" id="TBptDetailResult">
+        <result property="bpdid"    column="BPDID"    />
+        <result property="bptid"    column="BPTID"    />
+        <result property="detail"    column="DETAIL"    />
+        <result property="detailValue"    column="DETAIL_VALUE"    />
+        <result property="remark"    column="REMARK"    />
+    </resultMap>
+
+    <sql id="selectTBptDetailVo">
+        select BPDID, BPTID, DETAIL, DETAIL_VALUE, REMARK from t_bpt_detail
+    </sql>
+
+    <select id="selectTBptDetailList" parameterType="TBptDetail" resultMap="TBptDetailResult">
+        <include refid="selectTBptDetailVo"/>
+        <where>  
+            <if test="bptid != null  and bptid != ''"> and BPTID = #{bptid}</if>
+            <if test="detail != null  and detail != ''"> and DETAIL = #{detail}</if>
+            <if test="detailValue != null  and detailValue != ''"> and DETAIL_VALUE = #{detailValue}</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+        </where>
+    </select>
+    
+    <select id="selectTBptDetailById" parameterType="Long" resultMap="TBptDetailResult">
+        <include refid="selectTBptDetailVo"/>
+        where BPDID = #{bpdid}
+    </select>
+    
+        
+    <insert id="insertTBptDetail" parameterType="TBptDetail" useGeneratedKeys="true" keyProperty="bpdid">
+        insert into t_bpt_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bptid != null  and bptid != ''">BPTID,</if>
+            <if test="detail != null  and detail != ''">DETAIL,</if>
+            <if test="detailValue != null  and detailValue != ''">DETAIL_VALUE,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bptid != null  and bptid != ''">#{bptid},</if>
+            <if test="detail != null  and detail != ''">#{detail},</if>
+            <if test="detailValue != null  and detailValue != ''">#{detailValue},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTBptDetail" parameterType="TBptDetail">
+        update t_bpt_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bptid != null  and bptid != ''">BPTID = #{bptid},</if>
+            <if test="detail != null  and detail != ''">DETAIL = #{detail},</if>
+            <if test="detailValue != null  and detailValue != ''">DETAIL_VALUE = #{detailValue},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+        </trim>
+        where BPDID = #{bpdid}
+    </update>
+
+    <delete id="deleteTBptDetailById" parameterType="Long">
+        delete from t_bpt_detail where BPDID = #{bpdid}
+    </delete>
+
+    <delete id="deleteTBptDetailByIds" parameterType="String">
+        delete from t_bpt_detail where BPDID in 
+        <foreach item="bpdid" collection="array" open="(" separator="," close=")">
+            #{bpdid}
+        </foreach>
+    </delete>
+    
+	<insert id="batchInsert" parameterType="java.util.ArrayList">
+        insert into t_bpt_detail
+        	(
+        		BPTID,
+        		DETAIL,
+        		DETAIL_VALUE
+        	)
+        values
+         <foreach collection="list" index="index" item="item" separator="," >
+         	(
+         		#{item.bptid} ,
+         		#{item.detail} ,
+         		#{item.detail_value}       		
+         	)            
+         </foreach> 
+    </insert>
+    
+    <update id="batchUpdate" parameterType="java.util.ArrayList">
+    	<foreach collection="list" item="item" index="index" separator=";">
+        update t_bpt_detail
+        <set>
+            DETAIL_VALUE = #{item.detail_value}
+        </set>
+        where BPTID = #{item.bptid} and 
+        	DETAIL = #{item.detail}
+    	</foreach>    
+    </update>
+</mapper>

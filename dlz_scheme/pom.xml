@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.dlz</groupId>
+		<artifactId>dlz</artifactId>
+		<version>4.1.0</version>
+	</parent>
+
+	<groupId>com.dlz</groupId>
+	<artifactId>dlz-scheme</artifactId>
+	<version>4.1.0</version>
+
+	<description>
+	    dlz方案模块
+	</description>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<dependencies>
+
+		<!-- Mysql驱动包 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<!-- 通用工具 -->
+		<dependency>
+			<groupId>com.dlz</groupId>
+			<artifactId>dlz-common</artifactId>
+		</dependency>
+
+		<!--bimface api-->
+		<dependency>
+			<groupId>com.bimface</groupId>
+			<artifactId>bimface-java-sdk</artifactId>
+			<version>3.2.4</version>
+			<classifier>all</classifier>
+		</dependency>
+
+	</dependencies>
+</project>

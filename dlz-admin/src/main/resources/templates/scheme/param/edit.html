@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改方案参数')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-param-edit">
+            <input name="bptid" th:value="${bptid}" type="hidden">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">外形结构 *</label>
+                        <div class="col-sm-10">
+                            <div class="radio-inline">
+                                <label><input type="radio" value="“一”型" id="optionsRadios1" name="外形结构" th:checked="${tBptParam['外形结构']}=='“一”型'">“一”型</label>
+                            </div>
+                            <div class="radio-inline">
+                                <label><input type="radio" value="“T”型" id="optionsRadios2" name="外形结构" th:checked="${tBptParam['外形结构']}=='“T”型'">“T”型</label>
+                            </div>
+                            <div class="radio-inline">
+                                <label><input type="radio" value="“H”型" id="optionsRadios3" name="外形结构" th:checked="${tBptParam['外形结构']}=='“H”型'">“H”型</label>
+                            </div>
+                            <div class="radio-inline">
+                                <label><input type="radio" value="“Y”型" id="optionsRadios4" name="外形结构" th:checked="${tBptParam['外形结构']}=='“Y”型'">“Y”型</label>
+                            </div>
+                            <div class="radio-inline">
+                                <label><input type="radio" value="“十”型"  id="optionsRadios5" name="外形结构" th:checked="${tBptParam['外形结构']}=='“十”型'">“十”型</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">单元户数 *</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="单元户数">
+                                <option th:selected="${tBptParam['单元户数']}=='三户'">三户</option>
+                                <option th:selected="${tBptParam['单元户数']}=='四户'">四户</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">单元数量 *</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="单元数量">
+                                <option th:selected="${tBptParam['单元数量']}=='三户'">三户</option>
+                                <option th:selected="${tBptParam['单元数量']}=='二户'">二户</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">单元电梯 *</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="单元电梯">
+                                <option th:selected="${tBptParam['单元电梯']}=='1梯'">1梯</option>
+                                <option th:selected="${tBptParam['单元电梯']}=='1梯'">2梯</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">单元面宽 *</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="单元面宽" th:value="${tBptParam['单元面宽']}" class="form-control" placeholder="请输入文本">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">标准层数 *</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="标准层数" th:value="${tBptParam['标准层数']}" class="form-control" placeholder="请输入文本">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">结构形式 *</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="结构形式">
+                                <option th:selected="${tBptParam['结构形式']}=='剪力墙'">剪力墙</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">户型A *</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="户型A">
+                                <option th:selected="${tBptParam['户型A']}=='三室两厅'">三室两厅</option>
+                                <option th:selected="${tBptParam['户型A']}=='四室两厅'">四室两厅</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">户型B *</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="户型B ">
+                                <option th:selected="${tBptParam['建筑高度']}=='三室两厅'">三室两厅</option>
+                                <option th:selected="${tBptParam['建筑高度']}=='三室两厅'">四室两厅</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">建筑高度 *</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="建筑高度" th:value="${tBptParam['建筑高度']}" class="form-control" placeholder="请输入文本">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">层高 *</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="层高" th:value="${tBptParam['层高']}" class="form-control" placeholder="请输入文本">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "scheme/param";
+        $("#form-param-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-param-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

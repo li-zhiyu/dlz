@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改方案管理')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-main-edit" th:object="${tBptMain}">
+            <input name="bptid" th:field="*{bptid}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">方案编码：</label>
+                <div class="col-sm-8">
+                    <input name="bptId" th:field="*{bptId}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">方案名称：</label>
+                <div class="col-sm-8">
+                    <input name="bptNm" th:field="*{bptNm}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">创建人：</label>
+                <div class="col-sm-8">
+                    <input name="creator" th:field="*{creator}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "scheme/main";
+        $("#form-main-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-main-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

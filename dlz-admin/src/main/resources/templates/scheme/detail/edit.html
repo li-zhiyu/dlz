@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改方案明细')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-detail-edit">
+            <input name="bptid" th:value="${bptid}" type="hidden">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">开发商 *</label>
+                                <div class="col-sm-7">
+                                    <input name="开发商" th:value="${detailMap['开发商']}" class="form-control" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">单元户数 *</label>
+                                <div class="col-sm-7">
+                                    <select class="form-control" name="单元户数">
+                                        <option th:selected="${detailMap['单元户数']}=='三户'">三户</option>
+                                        <option th:selected="${detailMap['单元户数']}=='四户'">四户</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">单层建筑面积 *</label>
+                                <div class="col-sm-7">
+                                    <input name="单层建筑面积" th:value="${detailMap['单层建筑面积']}" class="form-control required" type="text">
+                                </div>
+                                <label class="col-sm-1 control-label">m²</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">地上建筑层数 *</label>
+                                <div class="col-sm-7">
+                                    <input name="地上建筑层数" th:value="${detailMap['地上建筑层数']}" class="form-control required" type="text">
+                                </div>
+                                <label class="col-sm-1 control-label">层</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">地上建筑高度 *</label>
+                                <div class="col-sm-7">
+                                    <input name="地上建筑高度" th:value="${detailMap['地上建筑高度']}" class="form-control required" type="text">
+                                </div>
+                                <label class="col-sm-1 control-label">m</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">户型数 *</label>
+                                <div class="col-sm-7">
+                                    <select class="form-control" name="户型数" id="户型数" onchange="changeOption()">
+                                        <option th:selected="${detailMap['户型数']}=='1'">1</option>
+                                        <option th:selected="${detailMap['户型数']}=='2'">2</option>
+                                        <option th:selected="${detailMap['户型数']}=='3'">3</option>
+                                        <option th:selected="${detailMap['户型数']}=='4'">4</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" id="layout2" th:hidden="(${detailMap['户型数']}>1) ? false : true">
+                                <label class="col-sm-4 control-label">户型二面积</label>
+                                <div class="col-sm-7">
+                                    <input name="户型二面积" th:value="${detailMap['户型二面积']}" class="form-control" type="text">
+                                </div>
+                                <label class="col-sm-1 control-label">m²</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" id="layout4" th:hidden="(${detailMap['户型数']}>3) ? false : true">
+                                <label class="col-sm-4 control-label">户型四面积</label>
+                                <div class="col-sm-7">
+                                    <input name="户型四面积" th:value="${detailMap['户型四面积']}" class="form-control" type="text">
+                                </div>
+                                <label class="col-sm-1 control-label">m²</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">项目所在地 *</label>
+                                <div class="col-sm-7">
+                                    <input name="项目所在地" th:value="${detailMap['项目所在地']}" class="form-control" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">层高 *</label>
+                                <div class="col-sm-7">
+                                    <input name="层高" th:value="${detailMap['层高']}" class="form-control" type="text">
+                                </div>
+                                <label class="col-sm-1 control-label">m</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">单元电梯 *</label>
+                                <div class="col-sm-7">
+                                    <select class="form-control" name="单元电梯">
+                                        <option th:selected="${detailMap['单元电梯']}=='1梯'">1梯</option>
+                                        <option th:selected="${detailMap['单元电梯']}=='2梯'">2梯</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">结构体系 *</label>
+                                <div class="col-sm-7">
+                                    <select class="form-control" name="detail_结构体系">
+                                        <option>剪力墙</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">装配率要求 *</label>
+                                <div class="col-sm-7">
+                                    <input name="装配率要求" th:value="${detailMap['装配率要求']}" class="form-control" type="text">
+                                </div>
+                                <label class="col-sm-1 control-label">%</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" id="layout1" >
+                                <label class="col-sm-4 control-label">户型一面积</label>
+                                <div class="col-sm-7">
+                                    <input name="户型一面积" th:value="${detailMap['户型一面积']}" class="form-control" type="text">
+                                </div>
+                                <label class="col-sm-1 control-label">m²</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" id="layout3" th:hidden="(${detailMap['户型数']}>2) ? false : true">
+                                <label class="col-sm-4 control-label">户型三面积</label>
+                                <div class="col-sm-7">
+                                    <input name="户型三面积" th:value="${detailMap['户型三面积']}" class="form-control" type="text">
+                                </div>
+                                <label class="col-sm-1 control-label">m²</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "scheme/detail";
+        $("#form-detail-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-detail-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

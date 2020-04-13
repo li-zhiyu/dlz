@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('方案管理列表')" />
+    <th:block th:include="include :: jquery-steps-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>方案名称：</p>
+                                <input type="text" name="bptNm"/>
+                            </li>
+                            <li>
+                                <p>创建人：</p>
+                                <input type="text" name="creator"/>
+                            </li>
+                            <li class="select-time">
+                                <p>创建时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" data-toggle="modal" data-target="#myModal" shiro:hasPermission="scheme:main:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="scheme:main:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="scheme:main:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="scheme:main:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="modal inmodal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                            </button>
+                            <h2 class="modal-title">单体建筑装配式方案快速设计</h2>
+                        </div>
+                        <div class="modal-body " >
+                            <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+                                <form id="form" action="" class="wizard-big form-horizontal clearfix" >
+                                    <h1>方案名称</h1>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">方案名称 *</label>
+                                                    <div class="col-sm-9">
+                                                        <input id="bptNm" name="bptNm" type="text" class="form-control required">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">方案编码 *</label>
+                                                    <div class="col-sm-9">
+                                                        <input id="bptCode" name="bptCode" type="text" class="form-control required">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">创建人 *</label>
+                                                    <div class="col-sm-9">
+                                                        <input id="creator" name="creator" type="text" class="form-control required">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <h1>方案明细</h1>
+                                    <fieldset>
+                                        <input name="bptid" th:value="${bptid}" type="hidden">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">开发商 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="detail_开发商" class="form-control" type="text">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">单元户数 *</label>
+                                                            <div class="col-sm-5">
+                                                                <select class="form-control" name="detail_单元户数">
+                                                                    <option>一户</option>
+                                                                    <option>二户</option>
+                                                                    <option>三户</option>
+                                                                    <option selected>四户</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">单层建筑面积 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="detail_单层建筑面积" class="form-control required" type="text" value="500">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m²</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">地上建筑层数 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="detail_地上建筑层数" class="form-control required" type="text" value="33">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">层</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">地上建筑高度 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="detail_地上建筑高度" class="form-control required" type="text" value="98">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">户型数 *</label>
+                                                            <div class="col-sm-5">
+                                                                <select class="form-control" name="detail_户型数" id="户型数" onchange="changeOption()">
+                                                                    <option>1</option>
+                                                                    <option selected>2</option>
+                                                                    <option>3</option>
+                                                                    <option>4</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group" id="layout2" >
+                                                            <label class="col-sm-6 control-label">户型二面积</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="detail_户型二面积" class="form-control" type="text" value="105">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m²</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group" id="layout4" style="display: none">
+                                                            <label class="col-sm-6 control-label">户型四面积</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="detail_户型四面积" class="form-control" type="text">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m²</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">项目所在地 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="detail_项目所在地" class="form-control" type="text">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">层高 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="detail_层高" class="form-control" type="text" value="2.9">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">单元电梯 *</label>
+                                                            <div class="col-sm-5">
+                                                                <select class="form-control" name="detail_单元电梯">
+                                                                    <option>1梯</option>
+                                                                    <option selected>2梯</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">结构体系 *</label>
+                                                            <div class="col-sm-5">
+                                                                <select class="form-control" name="detail_结构体系">
+                                                                    <option selected>剪力墙</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-6 control-label">装配率要求 *</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="detail_装配率要求" class="form-control" type="text" value="50">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">%</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group" id="layout1" >
+                                                            <label class="col-sm-6 control-label">户型一面积</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="detail_户型一面积" class="form-control" type="text" value="140">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m²</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group" id="layout3" style="display: none">
+                                                            <label class="col-sm-6 control-label">户型三面积</label>
+                                                            <div class="col-sm-5">
+                                                                <input name="detail_户型三面积" class="form-control" type="text">
+                                                            </div>
+                                                            <label class="col-sm-1 control-label">m²</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <h1>方案文件</h1>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">图形文件 *</label>
+                                                    <div class="col-sm-9">
+                                                        <input id="model-file" name="model-file" type="file"  data-min-file-count="1" data-theme="fas" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+     <th:block th:include="include :: jquery-steps-js" />
+     <th:block th:include="include :: bootstrap-fileinput-js" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('scheme:main:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('scheme:main:remove')}]];
+        var prefix = ctx + "scheme/main";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "方案管理",
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                    field : 'bptid',
+                    title : '方案主键',
+                    visible: false
+                },
+                {
+                    field : 'bptNm',
+                    title : '方案名称'
+                },
+                {
+                    field : 'bptId', 
+                    title : '方案编码'
+                },
+                {
+                    field : 'creator', 
+                    title : '创建人'
+                },
+                {
+                    field : 'createTime', 
+                    title : '创建时间'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="modifyDetail(\'' + row.bptid + '\')"><i class="fa fa-edit"></i>修改明细</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="modifyPoints(\'' + row.bptid + '\')"><i class="fa fa-edit"></i>积分管理</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="addFile(\'' + row.bptid + '\')"><i class="fa fa-edit"></i>文件管理</a> ');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        /* 方案管理-添加明细 */
+        function addDetail(id) {
+            var url = ctx + 'scheme/detail/add/' + id;
+            $.modal.open("添加方案明细", url, '800', '700');
+        };
+        /* 方案管理-修改明细 */
+        function modifyDetail(id) {
+            var url = ctx + 'scheme/detail/edit/' + id;
+            $.modal.open("修改方案明细", url, '800', '600');
+        };
+
+        /* 方案管理-修改积分 */
+        function modifyPoints(id) {
+            var url = ctx + 'scheme/main/points/' + id;
+            $.modal.open("积分管理", url, '800', '600');
+        };
+        /* 方案管理-修改积分 */
+        function addFile(id) {
+            var url = ctx + 'scheme/file/detail/'+id;
+            $.modal.openTab("积分管理", url);
+        };
+        /* 方案管理-添加参数 */
+        function addPara(id) {
+            var url = ctx + 'scheme/param/edit/' + id;
+            $.modal.open("添加方案参数", url, '800', '500');
+        };
+        /* 方案管理-添加参数 */
+        function modifyPara(id) {
+            var url = ctx + 'scheme/param/edit/' + id;
+            $.modal.open("修改方案参数", url, '800', '500');
+        };
+        function changeOption(){
+            //获取被选中的option标签
+            var vs = $('#户型数  option:selected').val();
+            if(vs == 1)
+            {
+                $("#layout1").show();
+                $("#layout2").hide();
+                //$("input[name='detail_户型二面积']").value="",
+                $("#layout3").hide();
+                $("#layout4").hide();
+            }
+            if(vs == 2)
+            {
+                $("#layout1").show();
+                $("#layout2").show();
+                $("#layout3").hide();
+                $("#layout4").hide();
+            }
+            if(vs == 3)
+            {
+                $("#layout1").show();
+                $("#layout2").show();
+                $("#layout3").show();
+                $("#layout4").hide();
+            }
+            if(vs == 4)
+            {
+                $("#layout1").show();
+                $("#layout2").show();
+                $("#layout3").show();
+                $("#layout4").show();
+            }
+        }
+        /* 方案管理-创建方案 */
+        $(document).ready(function () {
+            //$("#wizard").steps();
+            $("#form").steps({
+                bodyTag: "fieldset",
+                transitionEffect: "slideLeft",
+                autoFocus: true,
+                onStepChanging: function (event, currentIndex, newIndex) {
+                    if (currentIndex > newIndex) {
+                        return true
+                    }
+                    if (newIndex === 3 && Number($("#age").val()) < 18) {
+                        return false
+                    }
+                    var form = $(this);
+                    if (currentIndex < newIndex) {
+                        $(".body:eq(" + newIndex + ") label.error", form).remove();
+                        $(".body:eq(" + newIndex + ") .error", form).removeClass("error")
+                    }
+                    form.validate().settings.ignore = ":disabled,:hidden";
+                    return form.valid()
+                },
+                onStepChanged: function (event, currentIndex, priorIndex) {
+                    if (currentIndex === 2 && Number($("#age").val()) >= 18) {
+                        $(this).steps("next")
+                    }
+                    if (currentIndex === 2 && priorIndex === 3) {
+                        $(this).steps("previous")
+                    }
+                },
+                onFinishing: function (event, currentIndex) {
+                    var form = $(this);
+                    form.validate().settings.ignore = ":disabled";
+                    return form.valid()
+                },
+                onFinished: function (event, currentIndex) {
+                    if ($.validate.form()) {
+                        $("#model-file").fileinput('upload');//通过file-upload插件附带数据上传
+                        $('#myModal').modal('hide');
+                        $.table.refresh("bootstrap-table");
+                        //$.operate.save(ctx + "scheme/main/addAll", $('#form').serialize());
+                    }
+                }
+            }).validate({
+                errorPlacement: function (error, element) {
+                    element.before(error)
+                }, rules: {confirm: {equalTo: "#password"}}
+            });
+            $("#model-file").fileinput({
+                theme: 'explorer-fas',
+                language: 'zh',
+                uploadUrl: prefix+'/addAll',
+                showUpload: false,//去除上传按钮
+                overwriteInitial: true,
+                //initialPreviewAsData: true,
+                maxFileCount:10,
+                allowedFileExtensions: ['jpg', 'png','dwg'],
+                dropZoneTitle:'拖拽图形文件到这里 &hellip;<br>支持格式：.dwg/.png/.jpg',
+                previewSettings: { image: {width: "100px", height: "100px"}},
+                layoutTemplates: {
+                    actionUpload: '',//去除上传按钮
+                    actionDelete: '',//去除删除按钮
+                },
+                uploadExtraData:function () {           //传参
+                    var data = {
+                        "formData": $('#form').serialize(),      //此处自定义传参
+                    };
+                    return data;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

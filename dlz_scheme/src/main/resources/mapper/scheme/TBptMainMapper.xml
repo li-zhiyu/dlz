@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TBptMainMapper">
+    
+    <resultMap type="TBptMain" id="TBptMainResult">
+        <result property="bptid"    column="BPTID"    />
+        <result property="bptCode"    column="BPT_CODE"    />
+        <result property="bptNm"    column="BPT_NM"    />
+        <result property="creator"    column="CREATOR"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="remark"    column="REMARK"    />
+    </resultMap>
+
+    <sql id="selectTBptMainVo">
+        select BPTID, BPT_CODE, BPT_NM, CREATOR, CREATE_TIME, REMARK from t_bpt_main
+    </sql>
+
+    <select id="selectTBptMainList" parameterType="TBptMain" resultMap="TBptMainResult">
+        <include refid="selectTBptMainVo"/>
+        <where>  
+            <if test="bptCode != null  and bptCode != ''"> and BPT_CODE = #{bptCode}</if>
+            <if test="bptNm != null  and bptNm != ''"> and BPT_NM = #{bptNm}</if>
+            <if test="creator != null  and creator != ''"> and CREATOR = #{creator}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+        </where>
+    </select>
+    
+    <select id="selectTBptMainById" parameterType="Long" resultMap="TBptMainResult">
+        <include refid="selectTBptMainVo"/>
+        where BPTID = #{bptid}
+    </select>
+        
+    <insert id="insertTBptMain" parameterType="TBptMain" useGeneratedKeys="true" keyProperty="bptid">
+        insert into t_bpt_main
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bptCode != null  and bptCode != ''">BPT_CODE,</if>
+            <if test="bptNm != null  and bptNm != ''">BPT_NM,</if>
+            <if test="creator != null  and creator != ''">CREATOR,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+            <if test="path != null  and path != ''">PATH,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bptCode != null  and bptCode != ''">#{bptCode},</if>
+            <if test="bptNm != null  and bptNm != ''">#{bptNm},</if>
+            <if test="creator != null  and creator != ''">#{creator},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="path != null  and path != ''">#{path},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTBptMain" parameterType="TBptMain">
+        update t_bpt_main
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bptCode != null  and bptCode != ''">BPT_CODE = #{bptCode},</if>
+            <if test="bptNm != null  and bptNm != ''">BPT_NM = #{bptNm},</if>
+            <if test="creator != null  and creator != ''">CREATOR = #{creator},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+        </trim>
+        where BPTID = #{bptid}
+    </update>
+
+    <delete id="deleteTBptMainById" parameterType="Long">
+        delete from t_bpt_main where BPTID = #{bptid}
+    </delete>
+
+    <delete id="deleteTBptMainByIds" parameterType="String">
+        delete from t_bpt_main where BPTID in 
+        <foreach item="bptid" collection="array" open="(" separator="," close=")">
+            #{bptid}
+        </foreach>
+    </delete>
+    
+</mapper>
