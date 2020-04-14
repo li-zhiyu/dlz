@@ -123,13 +123,19 @@ public class Global
     }
 
     /**
-     *
-     * 获取工程案例文件上传路径
-     * @return
+     * 获取工程案例图纸模型文件上传路径
      */
     public static String getProjectFilePath()
     {
         return getProfile() + "/projectFile";
+    }
+
+    /**
+     * 获取工程案例其他文件上传路径
+     */
+    public static String getProjectFile2Path()
+    {
+        return getProfile() + "/projectFile2";
     }
     
     /**

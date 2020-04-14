@@ -15,18 +15,31 @@
         <th:block th:include="include :: footer" />
         <script>
             var viewer2D;
+            var viewer3D;
             var app;
             var viewToken='[[${viewtoken}]]';
+            var fileType='[[${fileType}]]';
             var loaderConfig = new BimfaceSDKLoaderConfig();
             loaderConfig.viewToken = viewToken;
             BimfaceSDKLoader.load(loaderConfig, successCallback, failureCallback);
             function successCallback(viewMetaData) {
                 var domShow = document.getElementById('domId');
-                var WebAppConfig = new Glodon.Bimface.Application.WebApplicationDrawingConfig();
-                WebAppConfig.domElement = domShow;
-                app = new Glodon.Bimface.Application.WebApplicationDrawing(WebAppConfig);
-                app.load(viewToken);
-                viewer2D = app.getViewer();
+                //CAD图纸预览
+                if (fileType==2){
+                    var WebAppConfig = new Glodon.Bimface.Application.WebApplicationDrawingConfig();
+                    WebAppConfig.domElement = domShow;
+                    app = new Glodon.Bimface.Application.WebApplicationDrawing(WebAppConfig);
+                    app.load(viewToken);
+                    viewer2D = app.getViewer();
+                }
+                //BIM模型预览
+                if (fileType==1){
+                    var webAppConfig = new Glodon.Bimface.Application.WebApplication3DConfig();
+                    webAppConfig.domElement = domShow;
+                    app = new Glodon.Bimface.Application.WebApplication3D(webAppConfig);
+                    app.addView(viewToken);
+                    viewer3D = app.getViewer();
+                }
             };
 
             function failureCallback(error) {

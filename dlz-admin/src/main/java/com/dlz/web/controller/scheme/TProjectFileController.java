@@ -106,11 +106,12 @@ public class TProjectFileController extends BaseController
     /**
      * 文件预览
      */
-    @GetMapping("/preview/{id}/{fileId}")
-    public String preview(@PathVariable("id") String id,@PathVariable("fileId") String fileId,ModelMap mmap) throws BimfaceException {
+    @GetMapping("/preview/{fileType}/{fileId}")
+    public String preview(@PathVariable("fileType") String fileType,@PathVariable("fileId") String fileId,ModelMap mmap) throws BimfaceException {
 
         String viewtoken = bimfaceComponent.getViewtoken(Long.valueOf(fileId));
         mmap.put("viewtoken", viewtoken);
+        mmap.put("fileType", fileType);
         return prefix + "/preview";
     }
 

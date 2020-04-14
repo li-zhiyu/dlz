@@ -463,14 +463,15 @@
                     width :  280,
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="addFile(\'' + row.pjtid + '\')"><i class="fa fa-upload"></i> 文件管理</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="addFile(\'' + row.pjtid + '\')"><i class="fa fa-upload"></i> 上传模型</a> ');
                         actions.push('<a class="btn btn-warning btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="addComponent(\'' + row.pjtid + '\')"><i class="fa fa-lock"></i> 绑定构件</a> ');
                         actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="addNode(\'' + row.pjtid + '\')"><i class="fa fa-lock"></i> 绑定节点</a> ');
-                        actions.push('<div class="dropup " style="padding-top: 5px">' +
+                        actions.push('<div class="dropdown" style="padding-top: 5px">' +
                                     '<a class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown"><i class="fa fa-sitemap"></i> 更多...</a>' +
-                                    '<ul class="dropdown-menu">' +
+                                    '<ul class="dropdown-menu" >' +
                                     '<li><a onclick="importScheme(\'' + row.pjtid + '\')"><i class="fa fa-table"></i>导入方案对比数据</a></li>' +
                                     '<li><a onclick="importScheme(\'' + row.pjtid + '\')"><i class="fa fa-list"></i>导入成本分析数据</a></li>' +
+                                    '<li><a onclick="addFile2(\'' + row.pjtid + '\')"><i class="fa fa-upload"></i>添加项目文档图片</a></li>' +
                                     '</ul>' +
                                     '</div>'
                                     );
@@ -483,6 +484,10 @@
         function addFile(id) {
             var url = '/scheme/file/detail/'+id;
             $.modal.openTab("文件管理", url);
+        };
+        function addFile2(id) {
+            var url = '/scheme/file2/detail/'+id;
+            $.modal.openTab("文件管理2", url);
         };
         function addComponent(id) {
             var url = prefix+'/bindingComponent/' + id;
