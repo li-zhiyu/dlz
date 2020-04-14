@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改项目效果图')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-info-edit" th:object="${tProjectInfo}">
+            <input name="pjtid" th:field="*{pjtid}" type="hidden">
+            <div class="form-group">
+                <div align="center">
+                    <img id="img-change" th:src="@{*{path}}" class="img-thumbnail" style="width: 550px;height: 550px">
+                </div>
+            </div>
+            <div class="form-group">
+                <div align="center">
+                    <a href="javascript:void(0)" class="upload-img"> <label for="file">修改</label> </a>
+                    <input type="file" id="file" name="file" style="display: none" accept="image/*" onchange="filechange(event)" >
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "scheme/info";
+
+        var filechange = function(event){
+            var files = event.target.files;
+            if (files && files.length > 0) {
+                var reads = new FileReader();
+                //f = document.getElementById('file').files[0];
+                reads.readAsDataURL(files[0]);
+                reads.onload = function(e) {
+                    document.getElementById('img-change').src = this.result;
+                };
+            }
+        };
+
+        function submitHandler() {
+            var formData = new FormData($( "#form-info-edit" )[0]);
+            var config = {
+                url: prefix+"/updateImage/"+$("#pjtid").val(),
+                type: "post",
+                dataType: "json",
+                data: formData,
+                cache: false,   //上传文件不需要缓存
+                contentType: false,  //需设置为false。因为是FormData对象，且已经声明了属性enctype="multipart/form-data"
+                processData: false,  //需设置为false。因为data值是FormData对象，不需要对数据做处理
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                    $.modal.disable();
+                },
+                success: function(result) {
+                    if (typeof callback == "function") {
+                        callback(result);
+                    }
+                    $.operate.successCallback(result);
+                }
+            };
+            $.ajax(config)
+        }
+    </script>
+</body>
+</html>

@@ -472,6 +472,7 @@
                                     '<li><a onclick="importScheme(\'' + row.pjtid + '\')"><i class="fa fa-table"></i>导入方案对比数据</a></li>' +
                                     '<li><a onclick="importScheme(\'' + row.pjtid + '\')"><i class="fa fa-list"></i>导入成本分析数据</a></li>' +
                                     '<li><a onclick="addFile2(\'' + row.pjtid + '\')"><i class="fa fa-upload"></i>添加项目文档图片</a></li>' +
+                                    '<li><a onclick="updateImage(\'' + row.pjtid + '\')"><i class="fa fa-edit"></i>修改项目效果图</a></li>' +
                                     '</ul>' +
                                     '</div>'
                                     );
@@ -505,6 +506,10 @@
         function importCost(id) {
             var url = prefix+'/bindingComponent/' + id;
             $.modal.openTab("绑定构件", url);
+        }
+        function updateImage(id) {
+            var url = prefix + '/updateImage/'+id;
+            $.modal.open("修改图片" , url);
         }
 
         function changeOption(){

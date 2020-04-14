@@ -104,6 +104,42 @@ public class TProjectInfoController extends BaseController
     }
 
     /**
+     * 修改图片
+     */
+    @GetMapping("/updateImage/{pjtid}")
+    public String updateImage(@PathVariable("pjtid") String pjtid ,ModelMap mmap)
+    {
+        TProjectInfo tProjectInfo = tProjectInfoService.selectTProjectInfoById(pjtid);
+        mmap.put("tProjectInfo", tProjectInfo);
+        return prefix + "/updateImage";
+    }
+
+    /**
+     * 修改图片
+     */
+    @RequiresPermissions("scheme:info:edit")
+    @PostMapping("/updateImage/{pjtid}")
+    @ResponseBody
+    public AjaxResult updateImage(@RequestParam("file") MultipartFile file,@PathVariable("pjtid") String pjtid)
+    {
+        try {
+            if (!file.isEmpty()){
+                String path = FileUploadUtils.upload(Global.getProjectPath(), file);
+                TProjectInfo tProjectInfo = new TProjectInfo();
+                tProjectInfo.setPjtid(pjtid);
+                tProjectInfo.setPath(path);
+                return toAjax(tProjectInfoService.updateTProjectInfo(tProjectInfo));
+            }
+            log.error("文件上传失败！");
+            return error();
+
+        } catch (Exception e) {
+            log.error("文件上传失败！", e);
+            return error(e.getMessage());
+        }
+    }
+
+    /**
      * 新增保存【项目信息】
      */
     @RequiresPermissions("scheme:info:add")
