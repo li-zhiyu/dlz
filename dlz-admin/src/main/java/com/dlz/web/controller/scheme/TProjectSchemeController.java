@@ -1,6 +1,8 @@
 package com.dlz.web.controller.scheme;
 
 import java.util.List;
+
+import com.dlz.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,10 +28,10 @@ import com.dlz.common.core.page.TableDataInfo;
  * @date 2020-04-16
  */
 @Controller
-@RequestMapping("/scheme/scheme")
+@RequestMapping("/scheme/projectscheme")
 public class TProjectSchemeController extends BaseController
 {
-    private String prefix = "scheme/scheme";
+    private String prefix = "scheme/projectscheme";
 
     @Autowired
     private ITProjectSchemeService tProjectSchemeService;
@@ -122,5 +124,30 @@ public class TProjectSchemeController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(tProjectSchemeService.deleteTProjectSchemeByIds(ids));
+    }
+
+    /**
+     * 设置默认方案
+     */
+    @Log(title = "方案管理", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("scheme:scheme:edit")
+    @PostMapping("/setDefault")
+    @ResponseBody
+    public AjaxResult setDefault(TProjectScheme tProjectScheme)
+    {
+        return toAjax(tProjectSchemeService.setDefaultScheme(tProjectScheme));
+    }
+
+    /**
+     * 取消默认方案
+     */
+    @Log(title = "方案管理", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("scheme:scheme:edit")
+    @PostMapping("/cancelDefault")
+    @ResponseBody
+    public AjaxResult cancelDefault(TProjectScheme tProjectScheme)
+    {
+        tProjectScheme.setIsDefault("N");
+        return toAjax(tProjectSchemeService.updateTProjectScheme(tProjectScheme));
     }
 }

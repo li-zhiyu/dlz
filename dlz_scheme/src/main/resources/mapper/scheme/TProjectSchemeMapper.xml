@@ -11,21 +11,74 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isDefault"    column="IS_DEFAULT"    />
         <result property="creator"    column="CREATOR"    />
         <result property="createTime"    column="CREATE_TIME"    />
+        <association property="projectInfo"    javaType="TProjectInfo" resultMap="TProjectInfoResult" />
+        <!--<collection  property="projectAdinfos"   javaType="java.util.List"        resultMap="TProjectAdinfoResult" />-->
+    </resultMap>
+
+    <resultMap type="TProjectInfo" id="TProjectInfoResult">
+        <result property="pjtid"    column="PJTID"    />
+        <result property="pjtNm"    column="PJT_NM"    />
+        <result property="pjtAddress"    column="PJT_ADDRESS"    />
+        <result property="provinceId"    column="PROVINCE_ID"    />
+        <result property="province"    column="PROVINCE"    />
+        <result property="cityId"    column="CITY_ID"    />
+        <result property="city"    column="CITY"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="creator"    column="CREATOR"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="cbzl"    column="CBZL"    />
+        <result property="jzhx"    column="JZHX"    />
+        <result property="hxt"    column="HXT"    />
+        <result property="yzgj"    column="YZGJ"    />
+        <result property="jdjc"    column="JDJC"    />
+        <result property="kfs"    column="KFS"    />
+        <result property="cg"    column="CG"    />
+        <result property="dcjzmj"    column="DCJZMJ"    />
+        <result property="dsjzcs"    column="DSJZCS"    />
+        <result property="jgtx"    column="JGTX"    />
+        <result property="dsjzgd"    column="DSJZGD"    />
+        <result property="zplyq"    column="ZPLYQ"    />
+        <result property="hxs"    column="HXS"    />
+        <result property="hx1"    column="HX1"    />
+        <result property="hx2"    column="HX2"    />
+        <result property="hx3"    column="HX3"    />
+        <result property="hx4"    column="HX4"    />
+        <result property="tblPath"    column="TBL_PATH"    />
+        <result property="path"    column="PATH"    />
+    </resultMap>
+
+    <resultMap type="TProjectAdinfo" id="TProjectAdinfoResult">
+        <result property="padid"    column="PADID"    />
+        <result property="pjtid"    column="PJTID"    />
+        <result property="faid"    column="FAID"    />
+        <result property="zbxm"    column="ZBXM"    />
+        <result property="zbxmcode"    column="ZBXM_CODE"    />
+        <result property="zb"    column="ZB"    />
+        <result property="df"    column="DF"    />
+        <result property="bz"    column="BZ"    />
     </resultMap>
 
     <sql id="selectTProjectSchemeVo">
         select FAID, PJTID, FAMC, IS_DEFAULT, CREATOR, CREATE_TIME from t_project_scheme
     </sql>
 
+    <sql id="selectTProjectSchemewithProjectNmVo">
+        select FAID, PJTID,PJT_NM, FAMC, IS_DEFAULT, CREATOR, CREATE_TIME from t_project_scheme
+    </sql>
+
     <select id="selectTProjectSchemeList" parameterType="TProjectScheme" resultMap="TProjectSchemeResult">
-        <include refid="selectTProjectSchemeVo"/>
+        select T1.FAID, T1.PJTID, T1.FAMC, T1.IS_DEFAULT, T1.CREATOR, T1.CREATE_TIME,
+                T2.PJT_NM
+                from t_project_scheme T1
+        LEFT JOIN t_project_info T2 ON T1.PJTID=T2.PJTID
         <where>  
-            <if test="pjtid != null  and pjtid != ''"> and PJTID = #{pjtid}</if>
+            <if test="pjtid != null  and pjtid != ''"> and T1.PJTID = #{pjtid}</if>
             <if test="famc != null  and famc != ''"> and FAMC = #{famc}</if>
             <if test="isDefault != null  and isDefault != ''"> and IS_DEFAULT = #{isDefault}</if>
             <if test="creator != null  and creator != ''"> and CREATOR = #{creator}</if>
             <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
         </where>
+
     </select>
     
     <select id="selectTProjectSchemeById" parameterType="Long" resultMap="TProjectSchemeResult">
@@ -61,6 +114,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
         </trim>
         where FAID = #{faid}
+    </update>
+
+    <update id="updateTProjectSchemes" parameterType="TProjectScheme">
+        update t_project_scheme
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="isDefault != null  and isDefault != ''">IS_DEFAULT = #{isDefault},</if>
+        </trim>
+        where PJTID = #{pjtid}
     </update>
 
     <delete id="deleteTProjectSchemeById" parameterType="Long">

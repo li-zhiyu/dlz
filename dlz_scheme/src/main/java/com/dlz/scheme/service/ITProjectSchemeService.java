@@ -58,4 +58,6 @@ public interface ITProjectSchemeService
      * @return 结果
      */
     public int deleteTProjectSchemeById(Long faid);
+
+    public int setDefaultScheme(TProjectScheme tProjectScheme);
 }

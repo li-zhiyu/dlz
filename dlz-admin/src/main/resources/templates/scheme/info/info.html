@@ -34,7 +34,7 @@
 
             <div class="btn-group-sm" id="toolbar" role="group">
                 <a class="btn btn-success" data-toggle="modal" data-target="#myModal" shiro:hasPermission="scheme:info:add">
-                    <i class="fa fa-plus"></i> 添加
+                    <i class="fa fa-plus"></i> 创建项目
                 </a>
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="scheme:info:edit">
                     <i class="fa fa-edit"></i> 修改
@@ -469,8 +469,6 @@
                         actions.push('<div class="dropdown" style="padding-top: 5px">' +
                                     '<a class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown"><i class="fa fa-sitemap"></i> 更多...</a>' +
                                     '<ul class="dropdown-menu" >' +
-                                    '<li><a onclick="importScheme(\'' + row.pjtid + '\')"><i class="fa fa-table"></i>导入方案对比数据</a></li>' +
-                                    '<li><a onclick="importScheme(\'' + row.pjtid + '\')"><i class="fa fa-list"></i>导入成本分析数据</a></li>' +
                                     '<li><a onclick="addFile2(\'' + row.pjtid + '\')"><i class="fa fa-upload"></i>添加项目文档图片</a></li>' +
                                     '<li><a onclick="updateImage(\'' + row.pjtid + '\')"><i class="fa fa-edit"></i>修改项目效果图</a></li>' +
                                     '</ul>' +

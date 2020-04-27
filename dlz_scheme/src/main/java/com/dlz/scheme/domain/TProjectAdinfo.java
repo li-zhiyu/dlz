@@ -22,9 +22,17 @@ public class TProjectAdinfo extends BaseEntity
     @Excel(name = "项目ID")
     private Long pjtid;
 
+    /** 方案ID */
+    @Excel(name = "方案ID")
+    private Long faid;
+
     /** 指标名称 */
     @Excel(name = "指标名称")
     private String zbxm;
+
+    /** 指标编码 */
+    @Excel(name = "指标编码")
+    private String zbxmcode;
 
     /** 占比 */
     @Excel(name = "占比")
@@ -38,7 +46,23 @@ public class TProjectAdinfo extends BaseEntity
     @Excel(name = "备注")
     private String bz;
 
-    public void setPadid(Long padid) 
+    public String getZbxmcode() {
+        return zbxmcode;
+    }
+
+    public void setZbxmcode(String zbxmcode) {
+        this.zbxmcode = zbxmcode;
+    }
+
+    public Long getFaid() {
+        return faid;
+    }
+
+    public void setFaid(Long faid) {
+        this.faid = faid;
+    }
+
+    public void setPadid(Long padid)
     {
         this.padid = padid;
     }

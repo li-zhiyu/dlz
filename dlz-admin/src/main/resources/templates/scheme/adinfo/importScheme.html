@@ -8,7 +8,7 @@
      <div class="container-div">
 		 <div class="col-sm-12 search-collapse" type="hidden">
 			 <form id="formId">
-				 <input name="pjtid" id="pjtid" type="hidden" th:value="${pjtid}" >
+				 <input name="faid" id="faid" type="hidden" th:value="${faid}" >
 			 </form>
 		 </div>
      	<div class="btn-group-sm" id="toolbar" role="group">
@@ -142,7 +142,7 @@
 <script id="importTpl" type="text/template">
 <form enctype="multipart/form-data" class="mt20 mb10">
 	<div class="col-xs-offset-1">
-		<input type="hidden" name="pjtid" id="pjtid" th:value="${pjtid}" >
+		<input type="hidden" name="faid" id="faid" th:value="${faid}" >
 		<input type="file" id="file" name="file"/>
 		<font color="red" class="pull-left mt10">
 			提示：<br>

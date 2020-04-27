@@ -126,11 +126,11 @@ public class TProjectAdinfoController extends BaseController
     /**
      * 导入Excel数据主界面
      */
-    @GetMapping("/importScheme/{pjtid}")
-    public String importScheme(@PathVariable("pjtid") Long pjtid,ModelMap mmap)
+    @GetMapping("/importScheme/{faid}")
+    public String importScheme(@PathVariable("faid") Long faid,ModelMap mmap)
     {
 
-        mmap.put("pjtid", pjtid);
+        mmap.put("faid", faid);
         return prefix + "/importScheme";
     }
 
@@ -141,9 +141,9 @@ public class TProjectAdinfoController extends BaseController
     @Log(title = "方案对比数据", businessType = BusinessType.INSERT)
     @PostMapping("/importSchemeData")
     @ResponseBody
-    public AjaxResult importSchemeData(@RequestParam("file") MultipartFile file, @RequestParam("pjtid") Long pjtid) throws IOException {
+    public AjaxResult importSchemeData(@RequestParam("file") MultipartFile file, @RequestParam("faid") Long faid) throws IOException {
 
-        return toAjax(tProjectAdinfoService.importExcelData(file,pjtid));
+        return toAjax(tProjectAdinfoService.importExcelData(file,faid));
     }
 
 }

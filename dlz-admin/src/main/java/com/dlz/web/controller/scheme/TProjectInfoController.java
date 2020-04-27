@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dlz.common.config.Global;
+import com.dlz.common.core.domain.Ztree;
 import com.dlz.common.utils.URLStringToJsonUtil;
 import com.dlz.common.utils.file.FileUploadUtils;
+import com.dlz.system.domain.SysDept;
 import com.dlz.web.controller.system.SysProfileController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -200,5 +202,25 @@ public class TProjectInfoController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(tProjectInfoService.deleteTProjectInfoByIds(ids));
+    }
+
+    /**
+     * 加载项目列表树
+     */
+    @GetMapping("/treeData")
+    @ResponseBody
+    public List<Ztree> treeData()
+    {
+        List<Ztree> ztrees = tProjectInfoService.selectProjectTree();
+        return ztrees;
+    }
+
+    /**
+     * 加载项目选择列表树
+     */
+    @GetMapping("/projectSelectTree")
+    public String projectSelectTree()
+    {
+        return prefix+"/projectSelectTree";
     }
 }

@@ -1,6 +1,8 @@
 package com.dlz.scheme.mapper;
 
 import com.dlz.scheme.domain.TScemeDictdata;
+import com.dlz.system.domain.SysUserPost;
+
 import java.util.List;
 
 /**
@@ -58,4 +60,13 @@ public interface TScemeDictdataMapper
      * @return 结果
      */
     public int deleteTScemeDictdataByIds(String[] faids);
+
+    /**
+     * 批量新增方案与预制构件关系
+     *
+     * @param list 插入列表
+     * @return 结果
+     */
+
+    public int batchInsertTScemeDictdata(List<TScemeDictdata> list);
 }

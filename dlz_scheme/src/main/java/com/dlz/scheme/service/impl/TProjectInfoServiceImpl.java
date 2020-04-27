@@ -1,7 +1,13 @@
 package com.dlz.scheme.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.dlz.common.annotation.DataScope;
+import com.dlz.common.constant.UserConstants;
+import com.dlz.common.core.domain.Ztree;
 import com.dlz.common.utils.DateUtils;
+import com.dlz.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dlz.scheme.mapper.TProjectInfoMapper;
@@ -92,5 +98,36 @@ public class TProjectInfoServiceImpl implements ITProjectInfoService
     public int deleteTProjectInfoById(String pjtid)
     {
         return tProjectInfoMapper.deleteTProjectInfoById(pjtid);
+    }
+
+
+    @Override
+    public List<Ztree> selectProjectTree()
+    {
+        List<TProjectInfo> projectList = tProjectInfoMapper.selectTProjectInfoList(null);
+        List<Ztree> ztrees = initZtree(projectList);
+        return ztrees;
+    }
+
+    public List<Ztree> initZtree(List<TProjectInfo> projectList)
+    {
+
+        List<Ztree> ztrees = new ArrayList<Ztree>();
+        Ztree ztreeP = new Ztree();
+        ztreeP.setId(1L);
+        ztreeP.setpId(0L);
+        ztreeP.setName("项目库");
+        ztreeP.setTitle("项目库");
+        ztrees.add(ztreeP);
+        for (TProjectInfo projectInfo : projectList)
+        {
+            Ztree ztree = new Ztree();
+            ztree.setId(Long.valueOf(projectInfo.getPjtid()));
+            ztree.setpId(1L);
+            ztree.setName(projectInfo.getPjtNm());
+            ztree.setTitle(projectInfo.getPjtNm());
+            ztrees.add(ztree);
+        }
+        return ztrees;
     }
 }

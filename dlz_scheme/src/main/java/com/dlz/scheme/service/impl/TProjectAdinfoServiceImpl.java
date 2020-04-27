@@ -103,7 +103,7 @@ public class TProjectAdinfoServiceImpl implements ITProjectAdinfoService
     }
 
     @Override
-    public int importExcelData(MultipartFile file, Long pjtid) throws IOException {
+    public int importExcelData(MultipartFile file, Long faid) throws IOException {
 
         try {
             InputStream inputStream = file.getInputStream();
@@ -118,15 +118,15 @@ public class TProjectAdinfoServiceImpl implements ITProjectAdinfoService
             Sheet sheet = workbook.getSheetAt(0);
             int rows = sheet.getPhysicalNumberOfRows();
             Row row= null;
-            String id = UUID.randomUUID().toString().substring(0, 5);
             List<TProjectAdinfo> dataList = new ArrayList<>();
             for (int i = 5; i < rows; i++) {
                 row = sheet.getRow(i);
                 if (row != null) {
                     TProjectAdinfo tProjectAdinfo = new TProjectAdinfo();
-                    tProjectAdinfo.setPjtid(pjtid);
-                    tProjectAdinfo.setZbxm(row.getCell(2).getStringCellValue());
-                    for (int j = 6; j < 9; j++) {
+                    tProjectAdinfo.setFaid(faid);
+                    tProjectAdinfo.setZbxm(row.getCell(4).getStringCellValue());
+                    tProjectAdinfo.setZbxmcode(row.getCell(5).getStringCellValue());
+                    for (int j = 9; j < 12; j++) {
                         Cell cell = row.getCell(j);
                         CellType cellType = cell.getCellTypeEnum();
                         String cellValue = "";
@@ -136,9 +136,9 @@ public class TProjectAdinfoServiceImpl implements ITProjectAdinfoService
                         }else {
                             cellValue = cell.getStringCellValue();
                         }
-                        if (j==6) tProjectAdinfo.setZb(cellValue.equals("") ? "" :PercentUtils.getPercentFormat(Double.valueOf(cellValue),2,1));
-                        if (j==7) tProjectAdinfo.setDf(cellValue);
-                        if (j==8) tProjectAdinfo.setBz(cellValue);
+                        if (j==9) tProjectAdinfo.setZb(cellValue.equals("") ? "" :PercentUtils.getPercentFormat(Double.valueOf(cellValue),2,1));
+                        if (j==10) tProjectAdinfo.setDf(cellValue);
+                        if (j==11) tProjectAdinfo.setBz(cellValue);
                     }
                     dataList.add(tProjectAdinfo);
                 } else {

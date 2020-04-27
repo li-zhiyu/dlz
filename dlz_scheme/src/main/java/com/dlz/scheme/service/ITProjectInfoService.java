@@ -1,5 +1,6 @@
 package com.dlz.scheme.service;
 
+import com.dlz.common.core.domain.Ztree;
 import com.dlz.scheme.domain.TProjectInfo;
 import java.util.List;
 
@@ -58,4 +59,10 @@ public interface ITProjectInfoService
      * @return 结果
      */
     public int deleteTProjectInfoById(String pjtid);
+
+    /**
+     * 查询项目树
+     *
+     */
+    public List<Ztree> selectProjectTree();
 }

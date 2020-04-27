@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.dlz.common.annotation.Excel;
 import com.dlz.common.core.domain.BaseEntity;
 
+import java.util.List;
+
 /**
  * 方案管理对象 t_project_scheme
  * 
@@ -34,7 +36,31 @@ public class TProjectScheme extends BaseEntity
     @Excel(name = "创建人")
     private String creator;
 
-    public void setFaid(Long faid) 
+    /** 预制构件 */
+    @Excel(name = "创建人")
+    private Long[] yzcomponentsIds;
+
+    private TProjectInfo projectInfo;
+
+    private List<TProjectAdinfo> projectAdinfos;
+
+    public TProjectInfo getProjectInfo() {
+        return projectInfo;
+    }
+
+    public void setProjectInfo(TProjectInfo projectInfo) {
+        this.projectInfo = projectInfo;
+    }
+
+    public Long[] getYzcomponentsIds() {
+        return yzcomponentsIds;
+    }
+
+    public void setYzcomponentsIds(Long[] yzcomponentsIds) {
+        this.yzcomponentsIds = yzcomponentsIds;
+    }
+
+    public void setFaid(Long faid)
     {
         this.faid = faid;
     }

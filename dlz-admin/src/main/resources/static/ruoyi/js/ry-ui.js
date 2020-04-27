@@ -447,7 +447,7 @@ var table = {
 						$.modal.disable();
 						var formData = new FormData();
 						formData.append("file", $('#file')[0].files[0]);
-						formData.append("pjtid",$('#pjtid').val());
+						formData.append("faid",$('#faid').val());
 						$.ajax({
 							url: table.options.importUrl,
 							data: formData,

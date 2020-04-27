@@ -58,4 +58,12 @@ public interface TProjectSchemeMapper
      * @return 结果
      */
     public int deleteTProjectSchemeByIds(String[] faids);
+
+    /**
+     * 通过项目ID批量修改方案管理
+     *
+     * @param tProjectScheme 要修改的数据
+     * @return 结果
+     */
+    public int updateTProjectSchemes(TProjectScheme tProjectScheme);
 }

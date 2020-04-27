@@ -34,6 +34,11 @@
 			<artifactId>dlz-common</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.dlz</groupId>
+			<artifactId>dlz-framework</artifactId>
+		</dependency>
+
 		<!--bimface api-->
 		<dependency>
 			<groupId>com.bimface</groupId>

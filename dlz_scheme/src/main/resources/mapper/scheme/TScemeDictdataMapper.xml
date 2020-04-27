@@ -54,5 +54,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{faid}
         </foreach>
     </delete>
+
+    <insert id="batchInsertTScemeDictdata">
+        insert into t_sceme_dictdata(FAID, DICT_CODE) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.faid},#{item.dictCode})
+        </foreach>
+    </insert>
     
 </mapper>
