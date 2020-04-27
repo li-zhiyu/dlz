@@ -11,11 +11,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="costItemCode"    column="COST_ITEM_CODE"    />
         <result property="content"    column="CONTENT"    />
         <result property="price"    column="PRICE"    />
-        <result property="change"    column="CHANGE"    />
+        <result property="changes"    column="CHANGES"    />
     </resultMap>
 
     <sql id="selectTProjectCostinfoVo">
-        select PCIID, FAID, COST_ITEM, COST_ITEM_CODE, CONTENT, PRICE, CHANGE from t_project_costinfo
+        select PCIID, FAID, COST_ITEM, COST_ITEM_CODE, CONTENT, PRICE, CHANGES from t_project_costinfo
     </sql>
 
     <select id="selectTProjectCostinfoList" parameterType="TProjectCostinfo" resultMap="TProjectCostinfoResult">
@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="costItemCode != null  and costItemCode != ''"> and COST_ITEM_CODE = #{costItemCode}</if>
             <if test="content != null  and content != ''"> and CONTENT = #{content}</if>
             <if test="price != null  and price != ''"> and PRICE = #{price}</if>
-            <if test="change != null  and change != ''"> and CHANGE = #{change}</if>
+            <if test="changes != null  and changes != ''"> and CHANGES = #{changes}</if>
         </where>
     </select>
     
@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="costItemCode != null  and costItemCode != ''">COST_ITEM_CODE,</if>
             <if test="content != null  and content != ''">CONTENT,</if>
             <if test="price != null  and price != ''">PRICE,</if>
-            <if test="change != null  and change != ''">CHANGE,</if>
+            <if test="changes != null  and changes != ''">CHANGES,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="faid != null ">#{faid},</if>
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="costItemCode != null  and costItemCode != ''">#{costItemCode},</if>
             <if test="content != null  and content != ''">#{content},</if>
             <if test="price != null  and price != ''">#{price},</if>
-            <if test="change != null  and change != ''">#{change},</if>
+            <if test="changes != null  and changes != ''">#{changes},</if>
          </trim>
     </insert>
 
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="costItemCode != null  and costItemCode != ''">COST_ITEM_CODE = #{costItemCode},</if>
             <if test="content != null  and content != ''">CONTENT = #{content},</if>
             <if test="price != null  and price != ''">PRICE = #{price},</if>
-            <if test="change != null  and change != ''">CHANGE = #{change},</if>
+            <if test="changes != null  and changes != ''">CHANGES = #{changes},</if>
         </trim>
         where PCIID = #{pciid}
     </update>
@@ -78,5 +78,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{pciid}
         </foreach>
     </delete>
+
+    <insert id="batchInsertTProjectCostinfo">
+        insert into t_project_costinfo(FAID, COST_ITEM,COST_ITEM_CODE,CONTENT,PRICE,CHANGES) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.faid},#{item.costItem},#{item.costItemCode},#{item.content},#{item.price},#{item.changes})
+        </foreach>
+    </insert>
     
 </mapper>

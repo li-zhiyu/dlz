@@ -1,6 +1,9 @@
 package com.dlz.scheme.service;
 
 import com.dlz.scheme.domain.TProjectCostinfo;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -58,4 +61,6 @@ public interface ITProjectCostinfoService
      * @return 结果
      */
     public int deleteTProjectCostinfoById(Long pciid);
+
+    public int importExcelData(MultipartFile file, Long faid) throws IOException;
 }

@@ -1,5 +1,6 @@
 package com.dlz.scheme.mapper;
 
+import com.dlz.scheme.domain.TProjectAdinfo;
 import com.dlz.scheme.domain.TProjectCostinfo;
 import java.util.List;
 
@@ -58,4 +59,12 @@ public interface TProjectCostinfoMapper
      * @return 结果
      */
     public int deleteTProjectCostinfoByIds(String[] pciids);
+
+    /**
+     * 批量插入方案成本数据
+     *
+     * @param tProjectCostinfo 要插入的数据
+     * @return 结果
+     */
+    public int batchInsertTProjectCostinfo(List<TProjectCostinfo> tProjectCostinfo);
 }

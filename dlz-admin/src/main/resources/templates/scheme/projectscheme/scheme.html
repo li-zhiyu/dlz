@@ -80,6 +80,7 @@
         var removeFlag = [[${@permission.hasPermi('scheme:scheme:remove')}]];
         var prefix1 = ctx + "scheme/projectscheme";
         var prefix2 = ctx + "scheme/adinfo";
+        var prefix3 = ctx + "scheme/costinfo";
 
         $(function() {
             var panehHidden = false;
@@ -171,7 +172,7 @@
                 {
                     field : 'pjtid', 
                     title : '项目ID',
-                    visible:false
+                    visible: false
                 },
                 {
                     field : 'projectInfo.pjtNm',
@@ -203,6 +204,7 @@
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="importScheme(\'' + row.faid + '\')"><i class="fa fa-upload"></i> 导入方案对比数据</a>');
+                        actions.push('<a class="btn btn-warning btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="importCost(\'' + row.faid + '\')"><i class="fa fa-upload"></i> 导入方案成本数据</a>');
                         return actions.join('');
                     }
                 }]
@@ -213,6 +215,11 @@
         function importScheme(id) {
             var url = prefix2+'/importScheme/' + id;
             $.modal.openTab("导入方案对比数据", url);
+        }
+
+        function importCost(id) {
+            var url = prefix3+'/importCost/' + id;
+            $.modal.openTab("导入方案成本数据", url);
         }
 
     </script>

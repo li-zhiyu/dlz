@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.dlz.common.utils.PercentUtils;
+import com.dlz.common.utils.poi.ExcelUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -124,18 +125,10 @@ public class TProjectAdinfoServiceImpl implements ITProjectAdinfoService
                 if (row != null) {
                     TProjectAdinfo tProjectAdinfo = new TProjectAdinfo();
                     tProjectAdinfo.setFaid(faid);
-                    tProjectAdinfo.setZbxm(row.getCell(4).getStringCellValue());
-                    tProjectAdinfo.setZbxmcode(row.getCell(5).getStringCellValue());
+                    tProjectAdinfo.setZbxm(ExcelUtil.getCellValue(row.getCell(4)));
+                    tProjectAdinfo.setZbxmcode(ExcelUtil.getCellValue(row.getCell(5)));
                     for (int j = 9; j < 12; j++) {
-                        Cell cell = row.getCell(j);
-                        CellType cellType = cell.getCellTypeEnum();
-                        String cellValue = "";
-                        if (cellType==CellType.NUMERIC||cellType==CellType.FORMULA)
-                        {
-                            cellValue = String.valueOf(cell.getNumericCellValue());
-                        }else {
-                            cellValue = cell.getStringCellValue();
-                        }
+                        String cellValue = ExcelUtil.getCellValue(row.getCell(j));
                         if (j==9) tProjectAdinfo.setZb(cellValue.equals("") ? "" :PercentUtils.getPercentFormat(Double.valueOf(cellValue),2,1));
                         if (j==10) tProjectAdinfo.setDf(cellValue);
                         if (j==11) tProjectAdinfo.setBz(cellValue);

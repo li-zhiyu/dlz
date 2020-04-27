@@ -12,13 +12,13 @@
 			 </form>
 		 </div>
      	<div class="btn-group-sm" id="toolbar" role="group">
-	        <a class="btn btn-info" onclick="importScheme()">
+	        <a class="btn btn-info" onclick="importCost()">
 	            <i class="fa fa-upload"></i> 导入Excel数据
 	        </a>
 			<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">
 				<i class="fa fa-remove"></i> 删除
 			</a>
-			<a class="btn btn-success" onclick="exportExcel(1)">
+			<a class="btn btn-success" onclick="exportExcel(2)">
 				<i class="fa fa-download"></i> 下载模板
 			</a>
 			<a class="btn btn-danger" onclick="closeItem()">
@@ -35,14 +35,14 @@
 	 <th:block th:include="include :: bootstrap-table-editable-js" />
 
     <script th:inline="javascript">
-        var prefix = ctx + "scheme/adinfo";
+        var prefix = ctx + "scheme/costinfo";
         var datas = [[${@dict.getType('sys_normal_disable')}]];
 
         $(function() {
             var options = {
                 url: prefix + "/list",
                 updateUrl: prefix + "/edit",
-                importUrl: prefix + "/importSchemeData",
+                importUrl: prefix + "/importCostData",
 				removeUrl: prefix + "/remove",
                 exportTemplateUrl: ctx + "download/excel/template/{fileId}",
                 detailUrl: prefix + "/detail/{id}",
@@ -52,14 +52,14 @@
 		        showToggle: false,
 		        showColumns: false,
 		        search: false,
-				pageSize: 30,
-		        modalName: "方案对比",
+				pageSize: 50,
+		        modalName: "方案成本",
 				onEditableSave: onEditableSave,
                 columns: [{
 		            checkbox: true
 		        },
 				{
-					field : 'padid',
+					field : 'pciid',
 					title : '主键ID',
 					visible: false
 				},
@@ -69,22 +69,22 @@
 					visible: false
 				},
 				{
-					field : 'zbxm',
+					field : 'costItem',
 					title : '指标参数'
 				},
 				{
-					field : 'zb',
-					title : '占比',
+					field : 'content',
+					title : '含量',
 					editable: true
 				},
 				{
-					field : 'df',
-					title : '得分',
+					field : 'price',
+					title : '单价',
 					editable: true
 				},
 				{
-					field : 'bz',
-					title : '备注',
+					field : 'changes',
+					title : '变化',
 					editable: true
 				}]
             };
@@ -93,13 +93,13 @@
 
 		function onEditableSave (field, row, oldValue, $el) {
 			var data = {
-				padid: row.padid,
+				pciid: row.pciid,
 				[field]: row[field],      //此处自定义传参
 			};
 			$.operate.saveModal(table.options.updateUrl,data);
 		}
 
-		function importScheme() {
+		function importCost() {
 			var rows = $("#bootstrap-table").bootstrapTable("getOptions").totalRows;
 			if (rows>0){
 				$.modal.alertError("已存在数据，无法导入！");

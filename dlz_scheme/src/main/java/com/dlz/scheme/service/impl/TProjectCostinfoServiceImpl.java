@@ -1,12 +1,23 @@
 package com.dlz.scheme.service.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.dlz.common.utils.PercentUtils;
+import com.dlz.common.utils.poi.ExcelUtil;
+import com.dlz.scheme.domain.TProjectAdinfo;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dlz.scheme.mapper.TProjectCostinfoMapper;
 import com.dlz.scheme.domain.TProjectCostinfo;
 import com.dlz.scheme.service.ITProjectCostinfoService;
 import com.dlz.common.core.text.Convert;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 方案成本Service业务层处理
@@ -90,5 +101,47 @@ public class TProjectCostinfoServiceImpl implements ITProjectCostinfoService
     public int deleteTProjectCostinfoById(Long pciid)
     {
         return tProjectCostinfoMapper.deleteTProjectCostinfoById(pciid);
+    }
+
+    @Override
+    public int importExcelData(MultipartFile file, Long faid) throws IOException {
+
+        try {
+            InputStream inputStream = file.getInputStream();
+            String filename = file.getOriginalFilename();
+            Workbook workbook = null;
+            if(filename.endsWith(".xls")){
+                workbook = new HSSFWorkbook(inputStream);
+            }
+            if (filename.endsWith(".xlsx")){
+                workbook = new XSSFWorkbook(inputStream);
+            }
+            Sheet sheet = workbook.getSheetAt(0);
+            int rows = sheet.getPhysicalNumberOfRows();
+            Row row= null;
+            List<TProjectCostinfo> dataList = new ArrayList<>();
+            for (int i = 2; i < rows-2; i++) {
+                row = sheet.getRow(i);
+                if (row != null) {
+                    TProjectCostinfo tProjectCostinfo = new TProjectCostinfo();
+                    tProjectCostinfo.setFaid(faid);
+                    tProjectCostinfo.setCostItem(ExcelUtil.getCellValue(row.getCell(1)));
+                    tProjectCostinfo.setCostItemCode(ExcelUtil.getCellValue(row.getCell(2)));
+                    for (int j = 5; j < 8; j++) {
+                        String cellValue = ExcelUtil.getCellValue(row.getCell(j));
+                        if (j==5) tProjectCostinfo.setContent(cellValue);
+                        if (j==6) tProjectCostinfo.setPrice(cellValue);
+                        if (j==7) tProjectCostinfo.setChanges(cellValue);
+                    }
+                    dataList.add(tProjectCostinfo);
+                } else {
+                    break;
+                }
+            }
+            return dataList == null? 0 : tProjectCostinfoMapper.batchInsertTProjectCostinfo(dataList);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

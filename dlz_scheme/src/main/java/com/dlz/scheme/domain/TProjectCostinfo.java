@@ -40,7 +40,7 @@ public class TProjectCostinfo extends BaseEntity
 
     /** 变化 */
     @Excel(name = "变化")
-    private String change;
+    private String changes;
 
     public void setPciid(Long pciid) 
     {
@@ -96,14 +96,14 @@ public class TProjectCostinfo extends BaseEntity
     {
         return price;
     }
-    public void setChange(String change) 
+    public void setChanges(String changes)
     {
-        this.change = change;
+        this.changes = changes;
     }
 
-    public String getChange() 
+    public String getChanges()
     {
-        return change;
+        return changes;
     }
 
     @Override
@@ -115,7 +115,7 @@ public class TProjectCostinfo extends BaseEntity
             .append("costItemCode", getCostItemCode())
             .append("content", getContent())
             .append("price", getPrice())
-            .append("change", getChange())
+            .append("changes", getChanges())
             .toString();
     }
 }

@@ -62,5 +62,5 @@ public interface ITProjectAdinfoService
      */
     public int deleteTProjectAdinfoById(Long padid);
 
-    public int importExcelData(MultipartFile file,Long pjtid) throws IOException;
+    public int importExcelData(MultipartFile file,Long faid) throws IOException;
 }
