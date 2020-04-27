@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('其他操作')" />
+	<th:block th:include="include :: bootstrap-editable-css" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		 <div class="col-sm-12 search-collapse" type="hidden">
+			 <form id="formId">
+				 <input name="faid" id="faid" type="hidden" th:value="${faid}" >
+			 </form>
+		 </div>
+     	<div class="btn-group-sm" id="toolbar" role="group">
+	        <a class="btn btn-info" onclick="importScheme()">
+	            <i class="fa fa-upload"></i> 导入Excel数据
+	        </a>
+			<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">
+				<i class="fa fa-remove"></i> 删除
+			</a>
+			<a class="btn btn-success" onclick="exportExcel(1)">
+				<i class="fa fa-download"></i> 下载模板
+			</a>
+			<a class="btn btn-danger" onclick="closeItem()">
+				<i class="fa fa-reply-all"></i> 关闭
+			</a>
+        </div>
+		<div class="row">
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table"></table>
+			</div>
+		</div>
+	</div>
+	 <th:block th:include="include :: footer" />
+	 <th:block th:include="include :: bootstrap-table-editable-js" />
+
+    <script th:inline="javascript">
+        var prefix = ctx + "scheme/adinfo";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                updateUrl: prefix + "/edit",
+                importUrl: prefix + "/importSchemeData",
+				removeUrl: prefix + "/remove",
+                exportTemplateUrl: ctx + "download/excel/template/{fileId}",
+                detailUrl: prefix + "/detail/{id}",
+                cleanUrl: prefix + "/clean",
+		        showSearch: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+		        search: false,
+				pageSize: 30,
+		        modalName: "方案对比",
+				onEditableSave: onEditableSave,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'padid',
+					title : '主键ID',
+					visible: false
+				},
+				{
+					field : 'pjtid',
+					title : '项目ID',
+					visible: false
+				},
+				{
+					field : 'zbxm',
+					title : '指标参数'
+				},
+				{
+					field : 'zb',
+					title : '占比',
+					editable: true
+				},
+				{
+					field : 'df',
+					title : '得分',
+					editable: true
+				},
+				{
+					field : 'bz',
+					title : '备注',
+					editable: true
+				}]
+            };
+            $.table.init(options);
+        });
+
+		function onEditableSave (field, row, oldValue, $el) {
+			var data = {
+				padid: row.padid,
+				[field]: row[field],      //此处自定义传参
+			};
+			$.operate.saveModal(table.options.updateUrl,data);
+		}
+
+		function importScheme() {
+			var rows = $("#bootstrap-table").bootstrapTable("getOptions").totalRows;
+			if (rows>0){
+				$.modal.alertError("已存在数据，无法导入！");
+				return;
+			}else
+			$.table.importScheme()
+		}
+
+		function exportExcel(fileId) {
+			var url = table.options.exportTemplateUrl.replace("{fileId}",fileId);
+			window.location.href = url;
+		}
+
+		/** 关闭选项卡 */
+		var closeItem = function(dataId) {
+			var topWindow = $(window.parent.document);
+			if ($.common.isNotEmpty(dataId)) {
+				window.parent.$.modal.closeLoading();
+				// 根据dataId关闭指定选项卡
+				$('.menuTab[data-id="' + dataId + '"]', topWindow).remove();
+				// 移除相应tab对应的内容区
+				$('.mainContent .RuoYi_iframe[data-id="' + dataId + '"]', topWindow).remove();
+				return;
+			}
+			var panelUrl = window.frameElement.getAttribute('data-panel');
+			$('.page-tabs-content .active i', topWindow).click();
+			if ($.common.isNotEmpty(panelUrl)) {
+				$('.menuTab[data-id="' + panelUrl + '"]', topWindow).addClass('active').siblings('.menuTab').removeClass('active');
+				$('.mainContent .RuoYi_iframe', topWindow).each(function () {
+					if ($(this).data('id') == panelUrl) {
+						$(this).show().siblings('.RuoYi_iframe').hide();
+						return false;
+					}
+				});
+			}
+		}
+    </script>
+</body>
+<!-- 导入区域 -->
+<script id="importTpl" type="text/template">
+<form enctype="multipart/form-data" class="mt20 mb10">
+	<div class="col-xs-offset-1">
+		<input type="hidden" name="faid" id="faid" th:value="${faid}" >
+		<input type="file" id="file" name="file"/>
+		<font color="red" class="pull-left mt10">
+			提示：<br>
+			1. 仅允许导入“xls”或“xlsx”格式文件！<br>
+			2. 严格用模板提交数据,否则会出现数据混乱！
+		</font>
+	</div>
+</form>
+</script>
+</html>

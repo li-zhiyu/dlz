@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TProjectCostinfoMapper">
+    
+    <resultMap type="TProjectCostinfo" id="TProjectCostinfoResult">
+        <result property="pciid"    column="PCIID"    />
+        <result property="faid"    column="FAID"    />
+        <result property="costItem"    column="COST_ITEM"    />
+        <result property="costItemCode"    column="COST_ITEM_CODE"    />
+        <result property="content"    column="CONTENT"    />
+        <result property="price"    column="PRICE"    />
+        <result property="change"    column="CHANGE"    />
+    </resultMap>
+
+    <sql id="selectTProjectCostinfoVo">
+        select PCIID, FAID, COST_ITEM, COST_ITEM_CODE, CONTENT, PRICE, CHANGE from t_project_costinfo
+    </sql>
+
+    <select id="selectTProjectCostinfoList" parameterType="TProjectCostinfo" resultMap="TProjectCostinfoResult">
+        <include refid="selectTProjectCostinfoVo"/>
+        <where>  
+            <if test="faid != null "> and FAID = #{faid}</if>
+            <if test="costItem != null  and costItem != ''"> and COST_ITEM = #{costItem}</if>
+            <if test="costItemCode != null  and costItemCode != ''"> and COST_ITEM_CODE = #{costItemCode}</if>
+            <if test="content != null  and content != ''"> and CONTENT = #{content}</if>
+            <if test="price != null  and price != ''"> and PRICE = #{price}</if>
+            <if test="change != null  and change != ''"> and CHANGE = #{change}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProjectCostinfoById" parameterType="Long" resultMap="TProjectCostinfoResult">
+        <include refid="selectTProjectCostinfoVo"/>
+        where PCIID = #{pciid}
+    </select>
+        
+    <insert id="insertTProjectCostinfo" parameterType="TProjectCostinfo" useGeneratedKeys="true" keyProperty="pciid">
+        insert into t_project_costinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="faid != null ">FAID,</if>
+            <if test="costItem != null  and costItem != ''">COST_ITEM,</if>
+            <if test="costItemCode != null  and costItemCode != ''">COST_ITEM_CODE,</if>
+            <if test="content != null  and content != ''">CONTENT,</if>
+            <if test="price != null  and price != ''">PRICE,</if>
+            <if test="change != null  and change != ''">CHANGE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="faid != null ">#{faid},</if>
+            <if test="costItem != null  and costItem != ''">#{costItem},</if>
+            <if test="costItemCode != null  and costItemCode != ''">#{costItemCode},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="price != null  and price != ''">#{price},</if>
+            <if test="change != null  and change != ''">#{change},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProjectCostinfo" parameterType="TProjectCostinfo">
+        update t_project_costinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="faid != null ">FAID = #{faid},</if>
+            <if test="costItem != null  and costItem != ''">COST_ITEM = #{costItem},</if>
+            <if test="costItemCode != null  and costItemCode != ''">COST_ITEM_CODE = #{costItemCode},</if>
+            <if test="content != null  and content != ''">CONTENT = #{content},</if>
+            <if test="price != null  and price != ''">PRICE = #{price},</if>
+            <if test="change != null  and change != ''">CHANGE = #{change},</if>
+        </trim>
+        where PCIID = #{pciid}
+    </update>
+
+    <delete id="deleteTProjectCostinfoById" parameterType="Long">
+        delete from t_project_costinfo where PCIID = #{pciid}
+    </delete>
+
+    <delete id="deleteTProjectCostinfoByIds" parameterType="String">
+        delete from t_project_costinfo where PCIID in 
+        <foreach item="pciid" collection="array" open="(" separator="," close=")">
+            #{pciid}
+        </foreach>
+    </delete>
+    
+</mapper>
