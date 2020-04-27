@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TProjectSchemeMapper">
+    
+    <resultMap type="TProjectScheme" id="TProjectSchemeResult">
+        <result property="faid"    column="FAID"    />
+        <result property="pjtid"    column="PJTID"    />
+        <result property="famc"    column="FAMC"    />
+        <result property="isDefault"    column="IS_DEFAULT"    />
+        <result property="creator"    column="CREATOR"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+    </resultMap>
+
+    <sql id="selectTProjectSchemeVo">
+        select FAID, PJTID, FAMC, IS_DEFAULT, CREATOR, CREATE_TIME from t_project_scheme
+    </sql>
+
+    <select id="selectTProjectSchemeList" parameterType="TProjectScheme" resultMap="TProjectSchemeResult">
+        <include refid="selectTProjectSchemeVo"/>
+        <where>  
+            <if test="pjtid != null  and pjtid != ''"> and PJTID = #{pjtid}</if>
+            <if test="famc != null  and famc != ''"> and FAMC = #{famc}</if>
+            <if test="isDefault != null  and isDefault != ''"> and IS_DEFAULT = #{isDefault}</if>
+            <if test="creator != null  and creator != ''"> and CREATOR = #{creator}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProjectSchemeById" parameterType="Long" resultMap="TProjectSchemeResult">
+        <include refid="selectTProjectSchemeVo"/>
+        where FAID = #{faid}
+    </select>
+        
+    <insert id="insertTProjectScheme" parameterType="TProjectScheme" useGeneratedKeys="true" keyProperty="faid">
+        insert into t_project_scheme
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pjtid != null  and pjtid != ''">PJTID,</if>
+            <if test="famc != null  and famc != ''">FAMC,</if>
+            <if test="isDefault != null  and isDefault != ''">IS_DEFAULT,</if>
+            <if test="creator != null  and creator != ''">CREATOR,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pjtid != null  and pjtid != ''">#{pjtid},</if>
+            <if test="famc != null  and famc != ''">#{famc},</if>
+            <if test="isDefault != null  and isDefault != ''">#{isDefault},</if>
+            <if test="creator != null  and creator != ''">#{creator},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProjectScheme" parameterType="TProjectScheme">
+        update t_project_scheme
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pjtid != null  and pjtid != ''">PJTID = #{pjtid},</if>
+            <if test="famc != null  and famc != ''">FAMC = #{famc},</if>
+            <if test="isDefault != null  and isDefault != ''">IS_DEFAULT = #{isDefault},</if>
+            <if test="creator != null  and creator != ''">CREATOR = #{creator},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+        </trim>
+        where FAID = #{faid}
+    </update>
+
+    <delete id="deleteTProjectSchemeById" parameterType="Long">
+        delete from t_project_scheme where FAID = #{faid}
+    </delete>
+
+    <delete id="deleteTProjectSchemeByIds" parameterType="String">
+        delete from t_project_scheme where FAID in 
+        <foreach item="faid" collection="array" open="(" separator="," close=")">
+            #{faid}
+        </foreach>
+    </delete>
+    
+</mapper>

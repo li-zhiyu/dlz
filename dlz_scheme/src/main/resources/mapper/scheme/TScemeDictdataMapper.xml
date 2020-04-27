@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TScemeDictdataMapper">
+    
+    <resultMap type="TScemeDictdata" id="TScemeDictdataResult">
+        <result property="faid"    column="FAID"    />
+        <result property="dictCode"    column="DICT_CODE"    />
+    </resultMap>
+
+    <sql id="selectTScemeDictdataVo">
+        select FAID, DICT_CODE from t_sceme_dictdata
+    </sql>
+
+    <select id="selectTScemeDictdataList" parameterType="TScemeDictdata" resultMap="TScemeDictdataResult">
+        <include refid="selectTScemeDictdataVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectTScemeDictdataById" parameterType="Long" resultMap="TScemeDictdataResult">
+        <include refid="selectTScemeDictdataVo"/>
+        where FAID = #{faid}
+    </select>
+        
+    <insert id="insertTScemeDictdata" parameterType="TScemeDictdata">
+        insert into t_sceme_dictdata
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="faid != null ">FAID,</if>
+            <if test="dictCode != null ">DICT_CODE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="faid != null ">#{faid},</if>
+            <if test="dictCode != null ">#{dictCode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTScemeDictdata" parameterType="TScemeDictdata">
+        update t_sceme_dictdata
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dictCode != null ">DICT_CODE = #{dictCode},</if>
+        </trim>
+        where FAID = #{faid}
+    </update>
+
+    <delete id="deleteTScemeDictdataById" parameterType="Long">
+        delete from t_sceme_dictdata where FAID = #{faid}
+    </delete>
+
+    <delete id="deleteTScemeDictdataByIds" parameterType="String">
+        delete from t_sceme_dictdata where FAID in 
+        <foreach item="faid" collection="array" open="(" separator="," close=")">
+            #{faid}
+        </foreach>
+    </delete>
+    
+</mapper>
