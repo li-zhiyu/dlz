@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dlz.scheme.mapper.TPoliticDocumentMapper">
+    
+    <resultMap type="TPoliticDocument" id="TPoliticDocumentResult">
+        <result property="pdid"    column="PDID"    />
+        <result property="pdNm"    column="PD_NM"    />
+        <result property="path"    column="PATH"    />
+        <result property="province"    column="PROVINCE"    />
+        <result property="city"    column="CITY"    />
+        <result property="creator"    column="CREATOR"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="memo"    column="MEMO"    />
+    </resultMap>
+
+    <sql id="selectTPoliticDocumentVo">
+        select PDID, PD_NM, PATH, PROVINCE, CITY, CREATOR, CREATE_TIME, MEMO from t_politic_document
+    </sql>
+
+    <select id="selectTPoliticDocumentList" parameterType="TPoliticDocument" resultMap="TPoliticDocumentResult">
+        <include refid="selectTPoliticDocumentVo"/>
+        <where>  
+            <if test="pdNm != null  and pdNm != ''"> and PD_NM like concat('%', #{pdNm}, '%')</if>
+            <if test="path != null  and path != ''"> and PATH = #{path}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="creator != null  and creator != ''"> and CREATOR = #{creator}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and CREATE_TIME between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="memo != null  and memo != ''"> and MEMO = #{memo}</if>
+        </where>
+    </select>
+    
+    <select id="selectTPoliticDocumentById" parameterType="Long" resultMap="TPoliticDocumentResult">
+        <include refid="selectTPoliticDocumentVo"/>
+        where PDID = #{pdid}
+    </select>
+        
+    <insert id="insertTPoliticDocument" parameterType="TPoliticDocument" useGeneratedKeys="true" keyProperty="pdid">
+        insert into t_politic_document
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pdNm != null  and pdNm != ''">PD_NM,</if>
+            <if test="path != null  and path != ''">PATH,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            <if test="city != null  and city != ''">CITY,</if>
+            <if test="creator != null  and creator != ''">CREATOR,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="memo != null  and memo != ''">MEMO,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pdNm != null  and pdNm != ''">#{pdNm},</if>
+            <if test="path != null  and path != ''">#{path},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="creator != null  and creator != ''">#{creator},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="memo != null  and memo != ''">#{memo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTPoliticDocument" parameterType="TPoliticDocument">
+        update t_politic_document
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pdNm != null  and pdNm != ''">PD_NM = #{pdNm},</if>
+            <if test="path != null  and path != ''">PATH = #{path},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="creator != null  and creator != ''">CREATOR = #{creator},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="memo != null  and memo != ''">MEMO = #{memo},</if>
+        </trim>
+        where PDID = #{pdid}
+    </update>
+
+    <delete id="deleteTPoliticDocumentById" parameterType="Long">
+        delete from t_politic_document where PDID = #{pdid}
+    </delete>
+
+    <delete id="deleteTPoliticDocumentByIds" parameterType="String">
+        delete from t_politic_document where PDID in 
+        <foreach item="pdid" collection="array" open="(" separator="," close=")">
+            #{pdid}
+        </foreach>
+    </delete>
+    
+</mapper>

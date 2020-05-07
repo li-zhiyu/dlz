@@ -32,8 +32,8 @@ public class DownloadExcelController extends BaseController
         {
             //获取要下载的模板名称
             String fileName = "";
-            if ("1".equals(id)) fileName = "1543658213654.xlsx";
-            if ("2".equals(id)) fileName = "ApplicationImportTemplate2.xlsx";
+            if ("1".equals(id)) fileName = "1543658213654-zpl.xlsx";
+            if ("2".equals(id)) fileName = "1543658213655-cb.xlsx";
 
             //获取要下载的模板路径
             //String filePath = getClass().getResource("/static/excelTemplate/" + fileName).getPath();

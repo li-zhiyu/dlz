@@ -1,4 +1,4 @@
 # 多环境部署
 spring:
   profiles: 
-    active: druid,dev
+    active: druid,prod

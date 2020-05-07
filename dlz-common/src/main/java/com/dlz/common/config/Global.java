@@ -115,6 +115,14 @@ public class Global
     }
 
     /**
+     * 获取政策文件上传路径
+     */
+    public static String getDocumentPath()
+    {
+        return getProfile() + "/policyDocument";
+    }
+
+    /**
      * 获取工程案例宣传图上传路径
      */
     public static String getProjectPath()

@@ -120,18 +120,18 @@ public class TProjectCostinfoServiceImpl implements ITProjectCostinfoService
             int rows = sheet.getPhysicalNumberOfRows();
             Row row= null;
             List<TProjectCostinfo> dataList = new ArrayList<>();
-            for (int i = 2; i < rows-2; i++) {
+            for (int i = 2; i < rows-3; i++) {
                 row = sheet.getRow(i);
                 if (row != null) {
                     TProjectCostinfo tProjectCostinfo = new TProjectCostinfo();
                     tProjectCostinfo.setFaid(faid);
-                    tProjectCostinfo.setCostItem(ExcelUtil.getCellValue(row.getCell(1)));
-                    tProjectCostinfo.setCostItemCode(ExcelUtil.getCellValue(row.getCell(2)));
-                    for (int j = 5; j < 8; j++) {
+                    tProjectCostinfo.setCostItem(ExcelUtil.getCellValue(row.getCell(3)));
+                    tProjectCostinfo.setCostItemCode(ExcelUtil.getCellValue(row.getCell(4)));
+                    for (int j = 7; j < 10; j++) {
                         String cellValue = ExcelUtil.getCellValue(row.getCell(j));
-                        if (j==5) tProjectCostinfo.setContent(cellValue);
-                        if (j==6) tProjectCostinfo.setPrice(cellValue);
-                        if (j==7) tProjectCostinfo.setChanges(cellValue);
+                        if (j==7) tProjectCostinfo.setContent(cellValue);
+                        if (j==8) tProjectCostinfo.setPrice(cellValue);
+                        if (j==9) tProjectCostinfo.setChanges(cellValue);
                     }
                     dataList.add(tProjectCostinfo);
                 } else {
